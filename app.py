@@ -501,68 +501,6 @@ def api_wellness():
         connection.close()
 
 
-# ==================================================
-# CREW WELLNESS CHECK-INS
-# ==================================================
-
-@app.route("/api/wellness", methods=["GET", "POST"])
-def api_wellness():
-    connection = get_db_connection()
-
-    try:
-        if request.method == "POST":
-            data = request.get_json(silent=True) or {}
-            crew_id = data.get("crew_id")
-            mood = str(data.get("mood", "")).strip()
-            notes = str(data.get("notes", "")).strip()
-
-            if not mood:
-                return jsonify({"error": "Please select a mood"}), 400
-
-            if mood not in ("Positive", "Neutral", "Low"):
-                return jsonify({"error": "Invalid mood selection"}), 400
-
-            if not crew_id:
-                return jsonify({"error": "Please select a crew member"}), 400
-
-            try:
-                crew_id = int(crew_id)
-            except (TypeError, ValueError):
-                return jsonify({"error": "Invalid crew member"}), 400
-
-            if not crew_exists(connection, crew_id):
-                return jsonify({"error": "Selected crew member was not found"}), 404
-
-            if len(notes) > 1000:
-                return jsonify({"error": "Notes must be 1000 characters or fewer"}), 400
-
-            cursor = connection.execute("""
-                INSERT INTO wellness_checkins (crew_id, mood, notes)
-                VALUES (?, ?, ?)
-            """, (crew_id, mood, notes))
-            connection.commit()
-
-            return jsonify({
-                "message": "Wellness check-in saved",
-                "id": cursor.lastrowid
-            }), 201
-
-        records = connection.execute("""
-            SELECT w.id, w.crew_id, w.mood, w.notes,
-                   w.recorded_at AS created_at, c.name AS crew_name
-            FROM wellness_checkins w
-            LEFT JOIN crew c ON c.id = w.crew_id
-            ORDER BY w.recorded_at DESC, w.id DESC
-        """).fetchall()
-
-        return jsonify([dict(record) for record in records])
-
-    except sqlite3.Error:
-        app.logger.exception("Wellness check-in database error")
-        return jsonify({"error": "Unable to process wellness check-in"}), 500
-    finally:
-        connection.close()
-
 
 # ==================================================
 # HEALTH MONITORING
