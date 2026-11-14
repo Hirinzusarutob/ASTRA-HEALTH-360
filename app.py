@@ -437,6 +437,69 @@ def manage_crew_member(crew_id):
 
     return jsonify({"message": "Crew member updated"})
 
+# ==================================================
+# CREW WELLNESS API
+# ==================================================
+
+@app.route("/api/wellness", methods=["GET", "POST"])
+def api_wellness():
+    connection = get_db_connection()
+
+    try:
+        if request.method == "POST":
+            data = request.get_json(silent=True) or {}
+
+            try:
+                crew_id = int(data.get("crew_id"))
+            except (TypeError, ValueError):
+                return jsonify({"error": "Please select a valid crew member."}), 400
+
+            mood = str(data.get("mood", "")).strip()
+            notes = str(data.get("notes", "")).strip()
+
+            if mood not in ["Positive", "Neutral", "Low"]:
+                return jsonify({"error": "Please select a valid mood."}), 400
+
+            if len(notes) > 1000:
+                return jsonify({"error": "Notes are too long."}), 400
+
+            if not crew_exists(connection, crew_id):
+                return jsonify({"error": "Crew member not found."}), 404
+
+            connection.execute("""
+                INSERT INTO wellness_checkins (crew_id, mood, notes)
+                VALUES (?, ?, ?)
+            """, (crew_id, mood, notes))
+
+            connection.commit()
+
+            return jsonify({
+                "success": True,
+                "message": "Wellness check-in saved successfully."
+            }), 201
+
+        records = connection.execute("""
+            SELECT
+                w.id,
+                w.crew_id,
+                w.mood,
+                w.notes,
+                w.recorded_at AS created_at,
+                c.name AS crew_name
+            FROM wellness_checkins w
+            LEFT JOIN crew c ON c.id = w.crew_id
+            ORDER BY w.recorded_at DESC
+        """).fetchall()
+
+        return jsonify([dict(row) for row in records])
+
+    except Exception:
+        app.logger.exception("Wellness API error")
+        return jsonify({"error": "Unable to process wellness request."}), 500
+
+    finally:
+        connection.close()
+
 
 # ==================================================
 # CREW WELLNESS CHECK-INS

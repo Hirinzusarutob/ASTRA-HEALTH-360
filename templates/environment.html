@@ -19,7 +19,57 @@
     </div>
 </div>
 
+
+<!-- ADD ENVIRONMENT READING -->
+<div class="dashboard-panel">
+    <div class="panel-header">
+        <div>
+            <h2>Add Environment Reading</h2>
+            <p>Enter a spacecraft environment reading for the prototype.</p>
+        </div>
+    </div>
+
+    <form id="environment-form" class="environment-form">
+        <label>
+            Cabin Temperature (°C)
+            <input type="number" name="cabin_temperature" step="0.1" min="0" max="100" required>
+        </label>
+
+        <label>
+            Cabin Pressure (kPa)
+            <input type="number" name="cabin_pressure" step="0.1" min="0" max="200" required>
+        </label>
+
+        <label>
+            Cabin Oxygen (%)
+            <input type="number" name="cabin_oxygen" step="0.1" min="0" max="100" required>
+        </label>
+
+        <label>
+            Cabin Humidity (%)
+            <input type="number" name="cabin_humidity" step="0.1" min="0" max="100" required>
+        </label>
+
+        <label>
+            Data Source
+            <select name="source">
+                <option value="SIMULATED">Simulated</option>
+                <option value="SENSOR">Sensor</option>
+            </select>
+        </label>
+
+        <button type="submit" class="astra-button" id="save-environment">
+            Save Environment Reading
+        </button>
+
+        <p id="environment-form-feedback" role="status"></p>
+    </form>
+</div>
+
+
 <!-- ENVIRONMENT READINGS -->
+
+
 <div class="stats-grid">
 
     <div class="stat-card">
