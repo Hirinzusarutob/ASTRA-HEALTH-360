@@ -8,6 +8,7 @@ from flask import Flask, jsonify, render_template, request
 from config import Config
 
 from services.ai_service import ask_astra
+from services.mission_copilot import build_mission_context
 
 from services.health_service import (
     save_health_record,
@@ -600,55 +601,53 @@ def manage_alert(alert_id):
 @app.route("/api/assistant", methods=["POST"])
 def api_assistant():
     data = request.get_json(silent=True) or {}
-
     question = str(data.get("question", "")).strip()
 
     if not question:
-        return jsonify({
-            "success": False,
-            "error": "Please enter a message."
-        }), 400
-
+        return jsonify({"success": False, "error": "Please enter a message."}), 400
     if len(question) > 4000:
-        return jsonify({
-            "success": False,
-            "error": "Message is too long."
-        }), 400
+        return jsonify({"success": False, "error": "Message is too long."}), 400
 
-    try:
-        history = data.get("conversation_history", [])
-        if not isinstance(history, list):
-            history = []
-
-        # Keep only a short, validated conversational context.
-        safe_history = []
-        for item in history[-10:]:
+    raw_history = data.get("conversation_history", [])
+    safe_history = []
+    if isinstance(raw_history, list):
+        for item in raw_history[-10:]:
             if not isinstance(item, dict):
                 continue
             role = item.get("role")
             content = item.get("content")
-            if role in ("user", "assistant") and isinstance(content, str):
-                content = content.strip()
-                if content and len(content) <= 4000:
-                    safe_history.append({
-                        "role": role,
-                        "content": content
-                    })
+            if role not in ("user", "assistant") or not isinstance(content, str):
+                continue
+            content = content.strip()
+            if content:
+                safe_history.append({"role": role, "content": content[:4000]})
 
-        answer = ask_astra(question, conversation_history=safe_history)
-
+    try:
+        mission_context = build_mission_context()
+        answer = ask_astra(
+            question,
+            conversation_history=safe_history,
+            mission_context=mission_context
+        )
         return jsonify({
             "success": True,
-            "answer": answer
+            "answer": answer,
+            "copilot": {
+                "enabled": True,
+                "database_connected": True,
+                "data_source": "ASTRA HEALTH 360 SQLite database"
+            }
         }), 200
-
-    except Exception as error:
-        app.logger.exception("ASTRA AI error")
-
+    except Exception:
+        app.logger.exception("ASTRA Mission Copilot error")
         return jsonify({
             "success": False,
-            "error": str(error)
+            "error": (
+                "ASTRA Mission Copilot is temporarily unavailable. "
+                "Please check the application logs."
+            )
         }), 503
+
 
 # ==================================================
 # FITNESS SESSIONS
