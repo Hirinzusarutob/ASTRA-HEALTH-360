@@ -174,6 +174,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     elements.form?.addEventListener("submit", sendMessage);
 
+    // One-tap mission prompts help new users explore the assistant.
+    document.querySelectorAll("[data-prompt]").forEach(button => {
+        button.addEventListener("click", () => {
+            if (!elements.input || sending) return;
+            elements.input.value = button.dataset.prompt || "";
+            elements.input.focus();
+            elements.input.dispatchEvent(new Event("input", { bubbles: true }));
+        });
+    });
+
     elements.stopSpeaking?.addEventListener("click", () => {
         if ("speechSynthesis" in window) {
             window.speechSynthesis.cancel();
