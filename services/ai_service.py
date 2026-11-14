@@ -1,8 +1,7 @@
-
+import os
 import requests
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "llama3.2:3b"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent"
 
 SYSTEM_PROMPT = """
 You are ASTRA, the AI health-support assistant for ASTRA HEALTH 360,
@@ -31,20 +30,18 @@ Safety rules:
 
 
 def ask_astra(question, conversation_history=None):
-    """
-    Send a question and recent conversation history to local Ollama.
-    No paid API key is required.
-    """
+    """Send a question to Gemini using a server-side API key."""
 
     if not isinstance(question, str) or not question.strip():
         raise ValueError("Please enter a valid question.")
 
-    messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT
-        }
-    ]
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "Gemini is not configured. Add GEMINI_API_KEY in Render environment variables."
+        )
+
+    contents = []
 
     if isinstance(conversation_history, list):
         for item in conversation_history[-12:]:
@@ -52,78 +49,75 @@ def ask_astra(question, conversation_history=None):
                 continue
 
             role = item.get("role")
-            content = item.get("content")
+            text = item.get("content")
 
             if role not in ("user", "assistant"):
                 continue
-
-            if not isinstance(content, str) or not content.strip():
+            if not isinstance(text, str) or not text.strip():
                 continue
 
-            messages.append({
-                "role": role,
-                "content": content[:4000]
+            contents.append({
+                "role": "model" if role == "assistant" else "user",
+                "parts": [{"text": text[:4000]}]
             })
 
-    # Avoid adding the current question twice when the browser
-    # already included it in conversation_history.
     if not (
-        messages and
-        messages[-1]["role"] == "user" and
-        messages[-1]["content"].strip() == question.strip()
+        contents
+        and contents[-1]["role"] == "user"
+        and contents[-1]["parts"][0]["text"].strip() == question.strip()
     ):
-        messages.append({
+        contents.append({
             "role": "user",
-            "content": question.strip()
+            "parts": [{"text": question.strip()}]
         })
 
     payload = {
-        "model": OLLAMA_MODEL,
-        "messages": messages,
-        "stream": False,
-        "options": {
+        "system_instruction": {
+            "parts": [{"text": SYSTEM_PROMPT}]
+        },
+        "contents": contents,
+        "generationConfig": {
             "temperature": 0.5,
-            "num_predict": 700
+            "maxOutputTokens": 700
         }
     }
 
     try:
         response = requests.post(
-            OLLAMA_URL,
+            GEMINI_API_URL,
+            headers={
+                "x-goog-api-key": api_key,
+                "Content-Type": "application/json"
+            },
             json=payload,
-            timeout=120
+            timeout=60
         )
 
-        response.raise_for_status()
-        result = response.json()
+        if not response.ok:
+            try:
+                detail = response.json().get("error", {}).get("message", "")
+            except ValueError:
+                detail = response.text[:500]
+            raise RuntimeError(
+                f"Gemini API error ({response.status_code}): {detail or 'Request failed.'}"
+            )
 
-        answer = (
-            result.get("message", {}).get("content", "")
+        result = response.json()
+        candidates = result.get("candidates", [])
+        if not candidates:
+            raise RuntimeError("Gemini returned no response. Try rephrasing your question.")
+
+        parts = candidates[0].get("content", {}).get("parts", [])
+        answer = "\n".join(
+            part.get("text", "") for part in parts if part.get("text")
         ).strip()
 
         if not answer:
-            raise RuntimeError("Ollama returned an empty response.")
+            raise RuntimeError("Gemini returned an empty response.")
 
         return answer
 
-    except requests.exceptions.ConnectionError as error:
-        raise RuntimeError(
-            "Cannot connect to Ollama. Make sure Ollama is running "
-            "and the llama3.2:3b model is installed."
-        ) from error
-
     except requests.exceptions.Timeout as error:
-        raise RuntimeError(
-            "The AI model took too long to respond. Please try again."
-        ) from error
-
-    except requests.exceptions.HTTPError as error:
-        raise RuntimeError(
-            "Ollama returned an HTTP error. Check that the model "
-            "llama3.2:3b is available."
-        ) from error
-
+        raise RuntimeError("Gemini took too long to respond. Please try again.") from error
     except requests.exceptions.RequestException as error:
-        raise RuntimeError(
-            f"AI connection error: {error}"
-        ) from error
+        raise RuntimeError(f"Could not connect to Gemini: {error}") from error
