@@ -616,7 +616,26 @@ def api_assistant():
         }), 400
 
     try:
-        answer = ask_astra(question)
+        history = data.get("conversation_history", [])
+        if not isinstance(history, list):
+            history = []
+
+        # Keep only a short, validated conversational context.
+        safe_history = []
+        for item in history[-10:]:
+            if not isinstance(item, dict):
+                continue
+            role = item.get("role")
+            content = item.get("content")
+            if role in ("user", "assistant") and isinstance(content, str):
+                content = content.strip()
+                if content and len(content) <= 4000:
+                    safe_history.append({
+                        "role": role,
+                        "content": content
+                    })
+
+        answer = ask_astra(question, conversation_history=safe_history)
 
         return jsonify({
             "success": True,
