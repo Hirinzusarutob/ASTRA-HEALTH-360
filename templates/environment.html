@@ -1,0 +1,136 @@
+
+{% extends "base.html" %}
+
+{% block title %}Cabin Environment | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Cabin Environment Monitoring{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Spacecraft Environment</h1>
+        <p>Monitor cabin conditions and environmental safety parameters.</p>
+    </div>
+
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        DATABASE CONNECTED
+    </div>
+</div>
+
+<!-- ENVIRONMENT READINGS -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">CABIN TEMPERATURE</div>
+        <div class="stat-value" id="cabin-temperature">--</div>
+        <div class="stat-description" id="temperature-status">
+            Awaiting reading
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">CABIN PRESSURE</div>
+        <div class="stat-value" id="cabin-pressure">--</div>
+        <div class="stat-description" id="pressure-status">
+            Awaiting reading
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">CABIN OXYGEN</div>
+        <div class="stat-value" id="cabin-oxygen">--</div>
+        <div class="stat-description" id="oxygen-status">
+            Awaiting reading
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">CABIN HUMIDITY</div>
+        <div class="stat-value" id="cabin-humidity">--</div>
+        <div class="stat-description" id="humidity-status">
+            Awaiting reading
+        </div>
+    </div>
+
+</div>
+
+<!-- ENVIRONMENT STATUS -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Environmental Monitoring Status</h2>
+            <p>Latest stored spacecraft environment readings.</p>
+        </div>
+
+        <button type="button" class="astra-button" id="refresh-environment">
+            Refresh Readings
+        </button>
+    </div>
+
+    <div id="environment-alert" class="alert-panel" aria-live="polite">
+        Waiting for environment data.
+    </div>
+
+    <div class="environment-source">
+        <strong>Data source:</strong>
+        <span id="environment-source">No data available</span>
+    </div>
+
+    <div class="environment-updated">
+        <strong>Last recorded:</strong>
+        <span id="environment-updated">Not available</span>
+    </div>
+
+</div>
+
+<!-- ENVIRONMENT HISTORY -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Environment Reading History</h2>
+            <p>Recent readings stored in the mission database.</p>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>TIME</th>
+                    <th>TEMPERATURE</th>
+                    <th>PRESSURE</th>
+                    <th>OXYGEN</th>
+                    <th>HUMIDITY</th>
+                    <th>SOURCE</th>
+                </tr>
+            </thead>
+
+            <tbody id="environment-history">
+                <tr>
+                    <td colspan="6">Loading environment history...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- SAFETY DISCLAIMER -->
+<div class="dashboard-panel">
+    <h3>Environmental Safety Information</h3>
+    <p>
+        This screen displays recorded engineering measurements. Without
+        connected spacecraft sensors, no live cabin conditions can be
+        confirmed. Simulated values must not be treated as real measurements.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/environment.js') }}"></script>
+{% endblock %}

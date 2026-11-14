@@ -1,0 +1,302 @@
+
+{% extends "base.html" %}
+
+{% block title %}ASTRA AI Assistant | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}ASTRA AI Mission Assistant{% endblock %}
+
+{% block head %}
+<style>
+.assistant-welcome {
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background: linear-gradient(115deg,#102b46,#101a32,#17234a);
+    border: 1px solid rgba(66,190,255,.25);
+}
+.assistant-welcome h2 {
+    color: #eaf7ff;
+    margin-top: 0;
+}
+.assistant-welcome p {
+    color: #a9bfd3;
+}
+.assistant-layout {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 270px;
+    gap: 18px;
+    align-items: start;
+}
+.assistant-chat-panel,
+.assistant-info-panel {
+    border-radius: 15px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+    overflow: hidden;
+}
+.assistant-chat-header {
+    padding: 17px 20px;
+    background: rgba(30,70,105,.35);
+    border-bottom: 1px solid rgba(125,180,220,.15);
+}
+.assistant-chat-header h3 {
+    margin: 0;
+    color: #eaf7ff;
+}
+.assistant-connection {
+    margin-top: 6px;
+    color: #22d6a0;
+    font-size: 12px;
+}
+#chat-messages {
+    height: 440px;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.assistant-message {
+    max-width: 85%;
+    padding: 13px 16px;
+    border-radius: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+.assistant-message.assistant {
+    align-self: flex-start;
+    background: #183550;
+    color: #e5f3ff;
+    border: 1px solid rgba(80,190,255,.17);
+}
+.assistant-message.user {
+    align-self: flex-end;
+    background: #12618c;
+    color: white;
+}
+.assistant-message-label {
+    display: block;
+    font-size: 11px;
+    opacity: .7;
+    margin-bottom: 5px;
+}
+.assistant-input-area {
+    padding: 17px;
+    border-top: 1px solid rgba(125,180,220,.15);
+}
+.assistant-input-row {
+    display: flex;
+    gap: 10px;
+}
+#user-message {
+    flex: 1;
+    min-width: 0;
+    resize: vertical;
+    min-height: 48px;
+    max-height: 130px;
+    padding: 13px;
+    border-radius: 9px;
+    border: 1px solid rgba(125,180,220,.3);
+    background: #0b192b;
+    color: #eaf4ff;
+    font: inherit;
+}
+.assistant-control-button {
+    padding: 11px 15px;
+    border: 0;
+    border-radius: 8px;
+    background: #167db4;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+.assistant-control-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+.assistant-voice-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 12px;
+}
+.assistant-voice-controls label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #b7c9da;
+    font-size: 13px;
+}
+.assistant-control-button.secondary {
+    background: #24435f;
+}
+.assistant-info-panel {
+    padding: 18px;
+}
+.assistant-info-panel h3 {
+    margin-top: 0;
+    color: #eaf7ff;
+}
+.assistant-info-panel p,
+.assistant-info-panel li {
+    color: #a9bfd3;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.assistant-info-panel ul {
+    padding-left: 18px;
+}
+.assistant-note {
+    padding: 12px;
+    border-radius: 9px;
+    background: rgba(244,189,72,.08);
+    border: 1px solid rgba(244,189,72,.2);
+    color: #e8d5a5;
+    font-size: 12px;
+    line-height: 1.6;
+}
+@media(max-width:900px) {
+    .assistant-layout {
+        grid-template-columns: 1fr;
+    }
+}
+@media(max-width:550px) {
+    #chat-messages {
+        height: 380px;
+        padding: 12px;
+    }
+    .assistant-input-row {
+        flex-direction: column;
+    }
+    .assistant-message {
+        max-width: 95%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="assistant-welcome">
+    <h2>Meet ASTRA AI</h2>
+    <p>
+        Your intelligent mission-support assistant, powered by the locally
+        running Ollama Llama 3.2 model.
+    </p>
+    <p>
+        Ask questions about astronaut wellness, mission health monitoring,
+        space environments and general mission support.
+    </p>
+</section>
+
+<div class="assistant-layout">
+
+    <section class="assistant-chat-panel">
+
+        <header class="assistant-chat-header">
+            <h3>ASTRA AI Communication Channel</h3>
+            <div class="assistant-connection">
+                LOCAL AI ASSISTANT · OLLAMA
+            </div>
+        </header>
+
+        <div id="chat-messages"
+             role="log"
+             aria-live="polite"
+             aria-label="Conversation with ASTRA AI">
+
+            <div class="assistant-message assistant">
+                <span class="assistant-message-label">ASTRA AI</span>
+                Hello, astronaut! I am ASTRA, your mission-support
+                assistant. How can I help you today?
+            </div>
+
+        </div>
+
+        <div class="assistant-input-area">
+
+            <form id="assistant-form">
+                <div class="assistant-input-row">
+                    <textarea
+                        id="user-message"
+                        name="question"
+                        placeholder="Ask ASTRA something..."
+                        aria-label="Enter your message"
+                        required
+                        maxlength="4000"></textarea>
+
+                    <button
+                        id="send-button"
+                        class="assistant-control-button"
+                        type="submit">
+                        Send
+                    </button>
+                </div>
+            </form>
+
+            <div class="assistant-voice-controls">
+
+                <button
+                    id="voice-button"
+                    class="assistant-control-button secondary"
+                    type="button">
+                    🎙 Start Voice Input
+                </button>
+
+                <label>
+                    <input id="speak-toggle" type="checkbox" checked>
+                    Enable Voice Output
+                </label>
+
+                <button
+                    id="stop-speaking"
+                    class="assistant-control-button secondary"
+                    type="button">
+                    Stop Speaking
+                </button>
+
+            </div>
+
+            <p id="assistant-status"
+               class="assistant-connection"
+               role="status"
+               aria-live="polite"></p>
+
+        </div>
+    </section>
+
+    <aside class="assistant-info-panel">
+        <h3>Mission Assistant</h3>
+
+        <p>
+            ASTRA AI runs through your locally installed Ollama model.
+            Your application does not need a paid AI API key.
+        </p>
+
+        <h3>Suggested Questions</h3>
+
+        <ul>
+            <li>Explain astronaut health monitoring.</li>
+            <li>What is oxygen saturation?</li>
+            <li>How can astronauts manage stress?</li>
+            <li>Explain space radiation risks.</li>
+            <li>What is the purpose of mission alerts?</li>
+            <li>How does the space environment affect the human body?</li>
+        </ul>
+
+        <div class="assistant-note">
+            <strong>Medical safety:</strong>
+            ASTRA AI provides general educational information. It is not a
+            medical professional or diagnostic system. Follow authorized
+            mission medical protocols for health concerns and emergencies.
+        </div>
+    </aside>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/assistant.js') }}"></script>
+<script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+{% endblock %}

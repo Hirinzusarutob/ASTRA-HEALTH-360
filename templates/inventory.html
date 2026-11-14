@@ -1,0 +1,183 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mission Inventory | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Mission Supply Inventory{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Mission Inventory</h1>
+        <p>Track essential supplies and onboard resource availability.</p>
+    </div>
+
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        INVENTORY DATABASE
+    </div>
+</div>
+
+<!-- INVENTORY STATISTICS -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">TOTAL ITEMS</div>
+        <div class="stat-value" id="inventory-total">0</div>
+        <div class="stat-description">Registered supply types</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">AVAILABLE UNITS</div>
+        <div class="stat-value" id="inventory-available">0</div>
+        <div class="stat-description">Total recorded quantity</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">LOW STOCK ITEMS</div>
+        <div class="stat-value" id="inventory-low">0</div>
+        <div class="stat-description">Items needing replenishment</div>
+    </div>
+
+</div>
+
+<!-- ADD SUPPLY -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Add Mission Supply</h2>
+            <p>Register a new item in the mission inventory.</p>
+        </div>
+    </div>
+
+    <form id="inventory-form" class="inventory-form">
+
+        <div class="form-group">
+            <label for="item-name">Item Name</label>
+            <input
+                type="text"
+                id="item-name"
+                name="item_name"
+                placeholder="Example: Water supply"
+                required
+                maxlength="100"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="item-category">Category</label>
+            <input
+                type="text"
+                id="item-category"
+                name="category"
+                placeholder="Example: Life Support"
+                maxlength="80"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="item-quantity">Quantity</label>
+            <input
+                type="number"
+                id="item-quantity"
+                name="quantity"
+                min="0"
+                step="1"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="item-minimum">Minimum Quantity</label>
+            <input
+                type="number"
+                id="item-minimum"
+                name="minimum_quantity"
+                min="0"
+                step="1"
+                value="5"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="item-unit">Unit</label>
+            <input
+                type="text"
+                id="item-unit"
+                name="unit"
+                placeholder="Example: units"
+                value="units"
+                maxlength="30"
+            >
+        </div>
+
+        <button type="submit" class="astra-button" id="add-inventory">
+            Add Supply
+        </button>
+
+    </form>
+
+    <p id="inventory-form-feedback" aria-live="polite"></p>
+
+</div>
+
+<!-- SUPPLY TABLE -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Supply Inventory</h2>
+            <p>Current records retrieved from the mission database.</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inventory-search">Search Supplies</label>
+        <input
+            type="search"
+            id="inventory-search"
+            placeholder="Search by item name or category..."
+        >
+        <p id="inventory-search-result" aria-live="polite"></p>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ITEM</th>
+                    <th>CATEGORY</th>
+                    <th>QUANTITY</th>
+                    <th>MINIMUM</th>
+                    <th>UNIT</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody id="inventory-list">
+                <tr>
+                    <td colspan="6">Loading mission inventory...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="dashboard-panel">
+    <h3>Inventory Safety Notice</h3>
+    <p>
+        Stock levels are based on recorded inventory entries. They do not
+        represent automatically verified spacecraft supplies until connected
+        to an authorized inventory system.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
+{% endblock %}

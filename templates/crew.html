@@ -1,0 +1,262 @@
+
+{% extends "base.html" %}
+
+{% block title %}Crew Management | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}Astronaut Crew Management{% endblock %}
+
+{% block head %}
+<style>
+.crew-welcome {
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(66,190,255,.22);
+    background: linear-gradient(115deg,#102b46,#101a32);
+}
+.crew-welcome h2 {
+    margin-top: 0;
+    color: #eaf7ff;
+}
+.crew-welcome p {
+    color: #a9bfd3;
+    margin-bottom: 0;
+}
+.crew-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.crew-stat {
+    padding: 19px;
+    border-radius: 13px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.16);
+}
+.crew-stat span {
+    color: #9fb4c9;
+    font-size: 13px;
+}
+.crew-stat strong {
+    display: block;
+    color: #f0f7ff;
+    font-size: 27px;
+    margin-top: 8px;
+}
+.crew-panel {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.75);
+    border: 1px solid rgba(125,180,220,.16);
+}
+.crew-panel h3 {
+    color: #eaf4ff;
+    margin-top: 0;
+}
+.crew-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 14px;
+}
+.crew-field label {
+    display: block;
+    margin-bottom: 7px;
+    color: #a9bfd3;
+    font-size: 13px;
+}
+.crew-field input,
+.crew-field select,
+.crew-field textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 11px;
+    border-radius: 8px;
+    border: 1px solid rgba(125,180,220,.25);
+    background: #0c192b;
+    color: #eaf4ff;
+}
+.crew-field textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+.crew-full-width {
+    grid-column: 1 / -1;
+}
+.crew-action-button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #167db4;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.crew-action-button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+.crew-search {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 360px;
+    padding: 11px;
+    border-radius: 8px;
+    border: 1px solid rgba(125,180,220,.25);
+    background: #0c192b;
+    color: #eaf4ff;
+    margin-bottom: 15px;
+}
+.crew-table-wrap {
+    overflow-x: auto;
+}
+.crew-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+.crew-table th,
+.crew-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(160,190,220,.13);
+    color: #d5e2ef;
+}
+.crew-table th {
+    color: #8fb4d3;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.crew-feedback {
+    margin-top: 12px;
+    color: #9fb4c9;
+    font-size: 13px;
+}
+.crew-secondary-button {
+    padding: 7px 10px;
+    margin: 2px;
+    border-radius: 6px;
+    border: 1px solid rgba(100,180,230,.35);
+    background: #12314b;
+    color: #eaf7ff;
+    cursor: pointer;
+}
+@media(max-width:700px) {
+    .crew-stat-grid { grid-template-columns: 1fr; }
+    .crew-form-grid { grid-template-columns: 1fr; }
+    .crew-full-width { grid-column: auto; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="crew-welcome">
+    <h2>Mission Crew Registry</h2>
+    <p>
+        Manage astronaut profiles, mission assignments and crew availability.
+        All changes are stored in the ASTRA HEALTH 360 database.
+    </p>
+</section>
+
+<section class="crew-stat-grid">
+    <article class="crew-stat">
+        <span>REGISTERED CREW</span>
+        <strong id="crew-count">--</strong>
+    </article>
+
+    <article class="crew-stat">
+        <span>ACTIVE CREW</span>
+        <strong id="active-crew-count">--</strong>
+    </article>
+
+    <article class="crew-stat">
+        <span>STANDBY CREW</span>
+        <strong id="standby-crew-count">--</strong>
+    </article>
+</section>
+
+<section class="crew-panel">
+    <h3>Add Crew Member</h3>
+
+    <form id="crew-form">
+        <div class="crew-form-grid">
+            <div class="crew-field">
+                <label for="crew-name">Full Name</label>
+                <input id="crew-name" name="name"
+                       type="text" required maxlength="100"
+                       placeholder="Enter crew member name">
+            </div>
+
+            <div class="crew-field">
+                <label for="crew-role">Mission Role</label>
+                <input id="crew-role" name="role"
+                       type="text" maxlength="100"
+                       placeholder="e.g. Mission Commander">
+            </div>
+
+            <div class="crew-field">
+                <label for="crew-status">Mission Status</label>
+                <select id="crew-status" name="mission_status">
+                    <option value="Active">Active</option>
+                    <option value="Standby">Standby</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Medical">Medical</option>
+                </select>
+            </div>
+
+            <div class="crew-field">
+                <label for="crew-notes">Crew Notes</label>
+                <textarea id="crew-notes" name="notes"
+                          maxlength="1000"
+                          placeholder="Optional mission notes"></textarea>
+            </div>
+
+            <div class="crew-full-width">
+                <button class="crew-action-button"
+                        type="submit" id="add-crew-button">
+                    Add Crew Member
+                </button>
+                <p id="crew-feedback" class="crew-feedback"
+                   role="status" aria-live="polite"></p>
+            </div>
+        </div>
+    </form>
+</section>
+
+<section class="crew-panel">
+    <h3>Registered Crew Members</h3>
+
+    <input id="crew-search" class="crew-search"
+           type="search" placeholder="Search by name or role..."
+           aria-label="Search crew members">
+
+    <div class="crew-table-wrap">
+        <table class="crew-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Mission Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="crew-list">
+                <tr>
+                    <td colspan="5">Loading crew database...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p id="crew-list-feedback" class="crew-feedback"
+       role="status" aria-live="polite"></p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/crew.js') }}"></script>
+{% endblock %}

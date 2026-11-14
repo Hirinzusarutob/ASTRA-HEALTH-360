@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080e1b">
+
+    <meta name="description"
+          content="ASTRA HEALTH 360 - Astronaut Health and Mission Monitoring System">
+
+    <title>{% block title %}ASTRA HEALTH 360{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/animations.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <!-- Advanced ASTRA Mission Control Theme -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/mission-control.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <h2>ASTRA <span>360</span></h2>
+            <p>MISSION HEALTH SYSTEM</p>
+        </div>
+
+        <nav aria-label="Main navigation">
+
+            <a href="{{ url_for('page', page='dashboard') }}">
+                ◈ Dashboard
+            </a>
+
+            <a href="{{ url_for('page', page='crew') }}">
+                ◈ Crew Management
+            </a>
+
+            <a href="{{ url_for('page', page='health') }}">
+                ◈ Health Monitoring
+            </a>
+
+            <a href="{{ url_for('page', page='assistant') }}">
+                ◈ ASTRA AI Assistant
+            </a>
+
+            <a href="{{ url_for('page', page='emergency') }}">
+                ◈ Emergency Centre
+            </a>
+
+            <a href="{{ url_for('page', page='wellness') }}">
+                ◈ Crew Wellness
+            </a>
+
+            <a href="{{ url_for('page', page='fitness') }}">
+                ◈ Fitness Monitoring
+            </a>
+
+            <a href="{{ url_for('page', page='medication') }}">
+                ◈ Medication
+            </a>
+
+            <a href="{{ url_for('page', page='environment') }}">
+                ◈ Environment
+            </a>
+
+            <a href="{{ url_for('page', page='inventory') }}">
+                ◈ Inventory
+            </a>
+
+            <a href="{{ url_for('page', page='communications') }}">
+                ◈ Communications
+            </a>
+
+            <a href="{{ url_for('page', page='records') }}">
+                ◈ Crew Records
+            </a>
+
+            <a href="{{ url_for('page', page='analytics') }}">
+                ◈ Analytics
+            </a>
+
+            <a href="{{ url_for('page', page='reports') }}">
+                ◈ Reports
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>ASTRA HEALTH 360</p>
+            <span>SPACE MISSION CONTROL</span>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+                <h3>{% block page_heading %}Mission Dashboard{% endblock %}</h3>
+                <p>ASTRA HEALTH 360 / SPACE MISSION CONTROL</p>
+            </div>
+
+            <div class="topbar-right">
+
+                <div id="system-connection"
+                     class="system-connection"
+                     data-backend-status="checking">
+                    CHECKING SYSTEM...
+                </div>
+
+                <div id="astra-clock">
+                    --:--:--
+                </div>
+
+            </div>
+
+        </header>
+
+        <section class="page-content">
+            {% block content %}{% endblock %}
+        </section>
+
+        <footer class="app-footer">
+            <p>
+                ASTRA HEALTH 360 |
+                Astronaut Health and Mission Monitoring System
+            </p>
+            <p>
+                AI-assisted monitoring is not a substitute for
+                authorized medical assessment or mission protocols.
+            </p>
+        </footer>
+
+    </main>
+
+</div>
+
+<!-- Shared application scripts -->
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

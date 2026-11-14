@@ -1,0 +1,256 @@
+
+/* =========================================
+   ASTRA HEALTH 360 - ANIMATION ENGINE
+   ========================================= */
+
+/* Page entrance */
+@keyframes astraPageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-content {
+    animation: astraPageEnter 0.65s ease-out both;
+}
+
+/* Holographic appearance */
+@keyframes astraHologram {
+    0%, 100% {
+        opacity: 0.85;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 1;
+        filter: brightness(1.3);
+    }
+}
+
+.astra-hologram {
+    animation: astraHologram 3s ease-in-out infinite;
+}
+
+/* Floating objects */
+@keyframes astraFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.astra-float {
+    animation: astraFloat 4s ease-in-out infinite;
+}
+
+/* Rotation */
+@keyframes astraRotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes astraRotateReverse {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.astra-rotate {
+    animation: astraRotate 15s linear infinite;
+}
+
+.astra-rotate-reverse {
+    animation: astraRotateReverse 20s linear infinite;
+}
+
+/* Scanning line */
+@keyframes astraScan {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.8;
+    }
+    80% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(400%);
+        opacity: 0;
+    }
+}
+
+.astra-scan {
+    position: relative;
+    overflow: hidden;
+}
+
+.astra-scan::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #35e0c1,
+        transparent
+    );
+    box-shadow: 0 0 15px #35e0c1;
+    animation: astraScan 4s linear infinite;
+}
+
+/* Pulsing status */
+@keyframes astraPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.12);
+        opacity: 0.65;
+    }
+}
+
+.astra-pulse {
+    animation: astraPulse 2s ease-in-out infinite;
+}
+
+/* Energy glow */
+@keyframes astraEnergy {
+    0%, 100% {
+        box-shadow:
+            0 0 8px rgba(53, 224, 193, 0.15),
+            inset 0 0 8px rgba(53, 224, 193, 0.04);
+    }
+    50% {
+        box-shadow:
+            0 0 25px rgba(53, 224, 193, 0.4),
+            inset 0 0 15px rgba(53, 224, 193, 0.1);
+    }
+}
+
+.astra-energy {
+    animation: astraEnergy 3s ease-in-out infinite;
+}
+
+/* Neon border */
+@keyframes astraBorderGlow {
+    0%, 100% {
+        border-color: rgba(53, 224, 193, 0.25);
+    }
+    50% {
+        border-color: rgba(53, 224, 193, 0.85);
+    }
+}
+
+.astra-border-glow {
+    border: 1px solid rgba(53, 224, 193, 0.25);
+    animation: astraBorderGlow 3s ease-in-out infinite;
+}
+
+/* Status indicator */
+@keyframes astraStatusBlink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
+.online-dot,
+.status-indicator {
+    animation: astraStatusBlink 2s ease-in-out infinite;
+}
+
+/* Button interaction */
+.astra-button {
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.astra-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(53, 224, 193, 0.2);
+}
+
+.astra-button:active {
+    transform: scale(0.97);
+}
+
+/* Card interaction */
+.astra-card {
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.astra-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(53, 224, 193, 0.45);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading animation */
+@keyframes astraLoading {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(300%);
+    }
+}
+
+.astra-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.astra-loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 35%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(53, 224, 193, 0.4),
+        transparent
+    );
+    animation: astraLoading 1.5s ease-in-out infinite;
+}
+
+/* Accessibility: respect reduced motion settings */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

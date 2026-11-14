@@ -1,0 +1,118 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mission Communications | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Mission Communications{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Mission Communications</h1>
+        <p>Internal crew messaging and mission communication records.</p>
+    </div>
+
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        LOCAL SERVER CONNECTED
+    </div>
+</div>
+
+<!-- COMMUNICATION SUMMARY -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">TOTAL MESSAGES</div>
+        <div class="stat-value" id="message-count">0</div>
+        <div class="stat-description">Saved communication records</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">MESSAGE STORAGE</div>
+        <div class="stat-value">ACTIVE</div>
+        <div class="stat-description">Flask database connection</div>
+    </div>
+
+</div>
+
+<!-- COMPOSE MESSAGE -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Compose Mission Message</h2>
+            <p>Send a message to the local mission communication log.</p>
+        </div>
+    </div>
+
+    <form id="message-form">
+
+        <div class="form-group">
+            <label for="message-channel">Communication Channel</label>
+
+            <select id="message-channel" required>
+                <option value="Mission Control">Mission Control</option>
+                <option value="Medical Team">Medical Team</option>
+                <option value="Crew Operations">Crew Operations</option>
+                <option value="Emergency">Emergency</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="message-text">Message</label>
+
+            <textarea
+                id="message-text"
+                rows="4"
+                maxlength="2000"
+                placeholder="Enter your mission communication..."
+                required
+            ></textarea>
+        </div>
+
+        <button type="submit" class="astra-button" id="send-message">
+            Send Message
+        </button>
+
+        <p id="message-feedback" aria-live="polite"></p>
+
+    </form>
+
+</div>
+
+<!-- MESSAGE HISTORY -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Communication History</h2>
+            <p>Messages retrieved from the mission database.</p>
+        </div>
+
+        <button type="button" class="astra-button" id="refresh-messages">
+            Refresh
+        </button>
+    </div>
+
+    <div id="message-list" aria-live="polite">
+        <p>Loading communication history...</p>
+    </div>
+
+</div>
+
+<div class="dashboard-panel">
+    <h3>Communication System Limitations</h3>
+    <p>
+        This module currently stores messages on the local Flask server.
+        It does not provide an actual radio, satellite, or spacecraft
+        communication link. Do not use it as an emergency communication
+        channel.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/communications.js') }}"></script>
+{% endblock %}

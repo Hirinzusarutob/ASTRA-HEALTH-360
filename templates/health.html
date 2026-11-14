@@ -1,0 +1,209 @@
+
+{% extends "base.html" %}
+
+{% block title %}Health Monitoring | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}Astronaut Health Monitoring{% endblock %}
+
+{% block head %}
+<style>
+.health-intro {
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: linear-gradient(115deg,#123b48,#10243d,#17234a);
+    border: 1px solid rgba(66,190,255,.2);
+}
+.health-intro h2 { color: #eaf7ff; margin-top: 0; }
+.health-intro p { color: #a9bfd3; line-height: 1.6; }
+
+.health-metrics {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.health-metric {
+    padding: 19px;
+    border-radius: 12px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.health-metric span {
+    color: #9fb8d0;
+    font-size: 12px;
+}
+.health-metric strong {
+    display: block;
+    margin-top: 9px;
+    color: #77e5d0;
+    font-size: 27px;
+}
+.health-panel {
+    padding: 20px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.health-panel h3 { color: #eaf7ff; margin-top: 0; }
+.health-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.health-button {
+    padding: 11px 15px;
+    border: 0;
+    border-radius: 8px;
+    background: #167db4;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.health-button.simulate { background: #168d83; }
+.health-button:disabled { opacity: .5; cursor: not-allowed; }
+.health-feedback {
+    color: #72e4bd;
+    font-size: 13px;
+    line-height: 1.6;
+}
+#health-chart {
+    width: 100%;
+    height: 280px;
+    display: block;
+}
+.health-table-wrapper { overflow-x: auto; }
+.health-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+.health-table th,
+.health-table td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid rgba(125,180,220,.13);
+    color: #c6d9e8;
+    font-size: 13px;
+}
+.health-table th { color: #80d9dc; }
+.health-note {
+    color: #91abc1;
+    font-size: 12px;
+    line-height: 1.7;
+}
+@media(max-width:700px) {
+    .health-metrics { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="health-intro">
+    <h2>Mission Health Monitoring Centre</h2>
+    <p>
+        Monitor available astronaut health records, review heart-rate
+        trends, oxygen saturation and body temperature, and distinguish
+        actual sensor submissions from simulated test readings.
+    </p>
+</section>
+
+<section class="health-metrics">
+
+    <article class="health-metric">
+        <span>AVERAGE HEART RATE</span>
+        <strong id="health-heart-rate">--</strong>
+    </article>
+
+    <article class="health-metric">
+        <span>AVERAGE OXYGEN SATURATION</span>
+        <strong id="health-oxygen">--</strong>
+    </article>
+
+    <article class="health-metric">
+        <span>AVERAGE BODY TEMPERATURE</span>
+        <strong id="health-temperature">--</strong>
+    </article>
+
+</section>
+
+<section class="health-panel">
+
+    <div class="health-toolbar">
+        <button id="refresh-health"
+                class="health-button"
+                type="button">
+            Refresh Health Data
+        </button>
+
+        <button id="generate-health-data"
+                class="health-button simulate"
+                type="button">
+            Generate Simulated Readings
+        </button>
+    </div>
+
+    <p id="health-feedback"
+       class="health-feedback"
+       role="status"
+       aria-live="polite">
+        Waiting for health records...
+    </p>
+
+    <p id="health-last-updated" class="health-note">
+        Last updated: --
+    </p>
+
+</section>
+
+<section class="health-panel">
+    <h3>Heart Rate Trend</h3>
+
+    <canvas id="health-chart"
+            data-chart-height="280"
+            aria-label="Astronaut heart rate trend chart"></canvas>
+
+    <p id="health-chart-status" class="health-note">
+        Waiting for chart data...
+    </p>
+</section>
+
+<section class="health-panel">
+    <h3>Latest Crew Health Records</h3>
+
+    <div class="health-table-wrapper">
+        <table class="health-table">
+            <thead>
+                <tr>
+                    <th>Crew Member</th>
+                    <th>Heart Rate</th>
+                    <th>Oxygen</th>
+                    <th>Temperature</th>
+                    <th>Data Source</th>
+                    <th>Recorded At</th>
+                </tr>
+            </thead>
+
+            <tbody id="health-record-list">
+                <tr>
+                    <td colspan="6">Loading health records...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="health-note">
+        SIMULATED means generated test data. SENSOR means data submitted
+        through the sensor API; it does not independently verify that
+        a physical sensor was connected.
+    </p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/health.js') }}"></script>
+{% endblock %}

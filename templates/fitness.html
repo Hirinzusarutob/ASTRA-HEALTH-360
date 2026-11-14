@@ -1,0 +1,204 @@
+
+{% extends "base.html" %}
+
+{% block title %}Fitness Monitoring | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}Astronaut Fitness Centre{% endblock %}
+
+{% block head %}
+<style>
+.fitness-intro {
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: linear-gradient(115deg,#123b48,#10243d,#17234a);
+    border: 1px solid rgba(66,190,255,.2);
+}
+.fitness-intro h2 { color: #eaf7ff; margin-top: 0; }
+.fitness-intro p { color: #a9bfd3; line-height: 1.6; }
+
+.fitness-grid {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.fitness-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.fitness-card span {
+    color: #9fb8d0;
+    font-size: 12px;
+}
+.fitness-card strong {
+    display: block;
+    margin-top: 9px;
+    color: #77e5d0;
+    font-size: 25px;
+}
+.fitness-panel {
+    padding: 22px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.fitness-panel h3 { color: #eaf7ff; margin-top: 0; }
+.fitness-form-group { margin-bottom: 17px; }
+.fitness-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #b9ccdd;
+    font-size: 13px;
+}
+.fitness-form-group select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #31516b;
+    background: #10243a;
+    color: white;
+}
+.fitness-timer {
+    margin: 24px 0;
+    color: #77e5d0;
+    font-size: clamp(40px,8vw,64px);
+    font-weight: 700;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.fitness-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.fitness-button {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 8px;
+    background: #168d83;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.fitness-button.stop { background: #bd5360; }
+.fitness-button:disabled { opacity: .5; cursor: not-allowed; }
+.fitness-feedback {
+    margin-top: 15px;
+    color: #77e5d0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+.fitness-history-item {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(125,180,220,.15);
+    color: #c6d9e8;
+}
+.fitness-history-item small { color: #91abc1; }
+.fitness-note {
+    color: #91abc1;
+    font-size: 12px;
+    line-height: 1.7;
+}
+@media(max-width:700px) {
+    .fitness-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="fitness-intro">
+    <h2>Space Mission Fitness Centre</h2>
+    <p>
+        Track astronaut exercise sessions, workout duration and estimated
+        calorie expenditure. Monitor available health readings alongside
+        exercise activity.
+    </p>
+</section>
+
+<section class="fitness-grid">
+
+    <article class="fitness-card">
+        <span>TOTAL WORKOUT SESSIONS</span>
+        <strong id="fitness-session-count">0</strong>
+    </article>
+
+    <article class="fitness-card">
+        <span>TOTAL EXERCISE DURATION</span>
+        <strong id="fitness-total-duration">0 min</strong>
+    </article>
+
+    <article class="fitness-card">
+        <span>ESTIMATED CALORIES</span>
+        <strong id="fitness-total-calories">0</strong>
+    </article>
+
+</section>
+
+<section class="fitness-panel">
+    <h3>Start Exercise Session</h3>
+
+    <div class="fitness-form-group">
+        <label for="fitness-crew">Select Astronaut</label>
+        <select id="fitness-crew" required>
+            <option value="">Loading crew members...</option>
+        </select>
+    </div>
+
+    <div class="fitness-timer" id="fitness-timer">
+        00:00:00
+    </div>
+
+    <div class="fitness-actions">
+        <button id="start-workout"
+                class="fitness-button"
+                type="button">
+            Start Workout
+        </button>
+
+        <button id="stop-workout"
+                class="fitness-button stop"
+                type="button"
+                disabled>
+            Finish & Save Workout
+        </button>
+    </div>
+
+    <p id="fitness-feedback"
+       class="fitness-feedback"
+       role="status"
+       aria-live="polite">
+        Select an astronaut and start a workout.
+    </p>
+</section>
+
+<section class="fitness-panel">
+    <h3>Latest Available Heart Rate</h3>
+    <div class="fitness-card">
+        <span>HEART RATE</span>
+        <strong id="fitness-heart-rate">-- BPM</strong>
+    </div>
+    <p class="fitness-note">
+        This is the latest stored health reading, not a live wearable measurement.
+    </p>
+</section>
+
+<section class="fitness-panel">
+    <h3>Workout History</h3>
+    <div id="fitness-history">
+        Loading workout history...
+    </div>
+    <p class="fitness-note">
+        Calorie expenditure is an estimate for demonstration and tracking,
+        not a medically validated measurement.
+    </p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/fitness.js') }}"></script>
+{% endblock %}

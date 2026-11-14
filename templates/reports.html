@@ -1,0 +1,89 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mission Reports | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Mission Reports{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Mission Reports Centre</h1>
+        <p>Generate printable reports from stored mission health and crew records.</p>
+    </div>
+
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        REPORT SYSTEM ACTIVE
+    </div>
+</div>
+
+<!-- REPORT GENERATOR -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Generate Mission Report</h2>
+            <p>Select a report type to retrieve information from the database.</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="report-type">Report Category</label>
+
+        <select id="report-type">
+            <option value="mission">Complete Mission Summary</option>
+            <option value="crew">Crew Information Report</option>
+            <option value="health">Crew Health Report</option>
+            <option value="alerts">Emergency and Alert Report</option>
+        </select>
+    </div>
+
+    <div class="report-actions">
+        <button type="button" class="astra-button" id="generate-report">
+            Generate Report
+        </button>
+
+        <button type="button" class="astra-button" id="print-report" disabled>
+            Print Report
+        </button>
+    </div>
+
+    <p id="report-status" aria-live="polite">
+        Select a report category to begin.
+    </p>
+
+</div>
+
+<!-- REPORT OUTPUT -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Report Preview</h2>
+            <p id="report-generated-time">No report generated yet.</p>
+        </div>
+    </div>
+
+    <div id="report-output" aria-live="polite">
+        <p>Your generated mission report will appear here.</p>
+    </div>
+
+</div>
+
+<!-- SYSTEM INFORMATION -->
+<div class="dashboard-panel">
+    <h3>Report Information</h3>
+    <p>
+        Reports are generated from records currently stored in the local
+        mission database. Simulated health measurements are identified as
+        simulated and must not be interpreted as real astronaut medical data.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

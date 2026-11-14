@@ -1,0 +1,139 @@
+
+{% extends "base.html" %}
+
+{% block title %}Crew Records | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Crew Medical Records{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Crew Records</h1>
+        <p>Mission personnel information and crew record management.</p>
+    </div>
+
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        DATABASE CONNECTED
+    </div>
+</div>
+
+<!-- RECORD STATISTICS -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">REGISTERED CREW</div>
+        <div class="stat-value" id="records-total">0</div>
+        <div class="stat-description">Personnel in mission database</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">RECORD SYSTEM</div>
+        <div class="stat-value">ACTIVE</div>
+        <div class="stat-description">Local database storage</div>
+    </div>
+
+</div>
+
+<!-- CREW SEARCH -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Personnel Records</h2>
+            <p>Search and view registered mission crew members.</p>
+        </div>
+
+        <button type="button" class="astra-button" id="refresh-records">
+            Refresh Records
+        </button>
+    </div>
+
+    <div class="form-group">
+        <label for="records-search">Search Crew</label>
+
+        <input
+            type="search"
+            id="records-search"
+            placeholder="Search by name, role or status..."
+        >
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>CREW ID</th>
+                    <th>NAME</th>
+                    <th>ROLE</th>
+                    <th>MISSION STATUS</th>
+                    <th>RECORD</th>
+                </tr>
+            </thead>
+
+            <tbody id="records-list">
+                <tr>
+                    <td colspan="5">Loading crew records...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p id="records-feedback" aria-live="polite"></p>
+
+</div>
+
+<!-- CREW DETAIL PANEL -->
+<div class="dashboard-panel" id="record-detail-panel" hidden>
+
+    <div class="panel-header">
+        <div>
+            <h2>Personnel Details</h2>
+            <p>Selected crew member information.</p>
+        </div>
+
+        <button type="button" class="astra-button" id="close-record-detail">
+            Close
+        </button>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-label">CREW ID</div>
+            <div class="stat-value" id="detail-id">--</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">CREW NAME</div>
+            <div class="stat-value" id="detail-name">--</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">MISSION ROLE</div>
+            <div class="stat-value" id="detail-role">--</div>
+        </div>
+
+    </div>
+
+    <div id="record-details">
+        <p>Select a crew member to view their details.</p>
+    </div>
+
+</div>
+
+<div class="dashboard-panel">
+    <h3>Data Privacy Notice</h3>
+    <p>
+        Crew records are stored in the local mission database. Access should
+        be restricted to authorized personnel. This page is not a substitute
+        for a certified electronic medical record system.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/records.js') }}"></script>
+{% endblock %}

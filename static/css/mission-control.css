@@ -1,0 +1,520 @@
+
+/* ============================================================
+   ASTRA HEALTH 360 — ORBITAL MISSION CONTROL
+   PREMIUM UI DESIGN SYSTEM — VERSION 2.0
+   ============================================================ */
+
+:root {
+    --astra-bg: #040916;
+    --astra-bg-secondary: #071326;
+    --astra-panel: rgba(12, 25, 47, .88);
+    --astra-panel-light: rgba(18, 37, 65, .85);
+    --astra-border: rgba(80, 166, 255, .2);
+
+    --astra-cyan: #39e8f4;
+    --astra-blue: #65aaff;
+    --astra-green: #35e6a2;
+    --astra-yellow: #ffc65c;
+    --astra-red: #ff5876;
+    --astra-purple: #a98cff;
+
+    --astra-text: #edf6ff;
+    --astra-muted: #8da6c5;
+
+    --astra-radius: 17px;
+    --astra-glow: 0 0 25px rgba(54, 229, 239, .12);
+}
+
+/* ================= GLOBAL BACKGROUND ================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(ellipse at 80% 0%, rgba(31, 106, 202, .16), transparent 40%),
+        radial-gradient(ellipse at 10% 90%, rgba(0, 200, 220, .07), transparent 40%),
+        linear-gradient(135deg, #040916, #071326 55%, #040916) !important;
+    color: var(--astra-text);
+    overflow-x: hidden;
+}
+
+/* Space grid */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .17;
+    background-image:
+        linear-gradient(rgba(83, 157, 255, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(83, 157, 255, .09) 1px, transparent 1px);
+    background-size: 45px 45px;
+    mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+/* Background star particles */
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .3;
+    background-image:
+        radial-gradient(1px 1px at 15% 20%, #fff, transparent),
+        radial-gradient(1px 1px at 75% 30%, #9bdcff, transparent),
+        radial-gradient(1px 1px at 40% 75%, #fff, transparent),
+        radial-gradient(1px 1px at 90% 80%, #9bdcff, transparent),
+        radial-gradient(2px 2px at 55% 45%, #fff, transparent);
+    background-size: 230px 230px;
+    animation: astra-stars 20s linear infinite;
+}
+
+.app-layout,
+.sidebar,
+.main-content,
+.page-content,
+.topbar,
+.orbital-dashboard {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes astra-stars {
+    from { transform: translateY(0); }
+    to { transform: translateY(-45px); }
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+    background: rgba(5, 13, 29, .96) !important;
+    border-right: 1px solid var(--astra-border) !important;
+    backdrop-filter: blur(22px);
+}
+
+.sidebar-brand h2 {
+    font-family: Orbitron, Inter, sans-serif;
+    letter-spacing: 2px;
+    text-shadow: 0 0 18px rgba(57, 232, 244, .3);
+}
+
+.sidebar-brand span {
+    color: var(--astra-cyan);
+}
+
+.sidebar nav a {
+    border-radius: 9px;
+    transition: .25s ease;
+}
+
+.sidebar nav a:hover {
+    background: rgba(57, 232, 244, .1);
+    color: var(--astra-cyan);
+    transform: translateX(4px);
+}
+
+.sidebar nav a.active,
+.sidebar nav a[aria-current="page"] {
+    background: rgba(57, 232, 244, .13);
+    color: var(--astra-cyan);
+    border-left: 3px solid var(--astra-cyan);
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar {
+    background: rgba(6, 16, 34, .8) !important;
+    border-bottom: 1px solid var(--astra-border) !important;
+    backdrop-filter: blur(20px);
+}
+
+.topbar-left h3 {
+    font-family: Orbitron, Inter, sans-serif;
+    letter-spacing: .8px;
+}
+
+#astra-clock {
+    color: var(--astra-cyan);
+    font-family: Orbitron, Inter, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+/* ================= TYPOGRAPHY ================= */
+
+h1, h2, h3, h4, h5 {
+    color: var(--astra-text);
+}
+
+h1 {
+    text-shadow: 0 0 24px rgba(77, 166, 255, .18);
+}
+
+p {
+    line-height: 1.65;
+}
+
+small,
+.muted {
+    color: var(--astra-muted);
+}
+
+/* ================= CARDS ================= */
+
+.card,
+.stat-card,
+.panel,
+.dashboard-card,
+.chart-card,
+.health-card,
+.oc-card,
+.oc-panel {
+    background: var(--astra-panel);
+    border: 1px solid var(--astra-border);
+    border-radius: var(--astra-radius);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .16);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.card:hover,
+.stat-card:hover,
+.panel:hover,
+.dashboard-card:hover,
+.chart-card:hover,
+.oc-card:hover {
+    border-color: rgba(57, 232, 244, .42);
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, .22),
+        0 0 22px rgba(57, 232, 244, .08);
+    transform: translateY(-3px);
+}
+
+/* ================= METRICS ================= */
+
+.stat-value,
+.metric-value,
+.health-value,
+.oc-card-value {
+    color: var(--astra-cyan);
+    font-family: Orbitron, Inter, sans-serif;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 18px rgba(57, 232, 244, .2);
+}
+
+/* ================= BUTTONS ================= */
+
+button,
+.btn,
+input[type="submit"],
+.oc-btn {
+    cursor: pointer;
+    transition: all .22s ease;
+}
+
+button:hover,
+.btn:hover,
+input[type="submit"]:hover,
+.oc-btn:hover {
+    filter: brightness(1.16);
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--astra-cyan);
+    outline-offset: 3px;
+}
+
+/* ================= INPUTS ================= */
+
+input,
+select,
+textarea {
+    background: rgba(4, 12, 27, .88) !important;
+    color: var(--astra-text) !important;
+    border: 1px solid var(--astra-border) !important;
+    border-radius: 10px !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #7189a8 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--astra-cyan) !important;
+    box-shadow: 0 0 15px rgba(57, 232, 244, .1) !important;
+}
+
+/* ================= TABLES ================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: rgba(57, 232, 244, .07);
+}
+
+th {
+    color: var(--astra-cyan);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td,
+th {
+    padding: 13px 15px;
+    border-bottom: 1px solid rgba(80, 166, 255, .12);
+}
+
+tbody tr {
+    transition: background .2s ease;
+}
+
+tbody tr:hover {
+    background: rgba(77, 166, 255, .07);
+}
+
+/* ================= STATUS INDICATORS ================= */
+
+.status-online,
+.status-normal,
+.status-active {
+    color: var(--astra-green);
+}
+
+.status-warning,
+.status-moderate {
+    color: var(--astra-yellow);
+}
+
+.status-critical,
+.status-danger,
+.status-emergency {
+    color: var(--astra-red);
+}
+
+.astra-status-dot,
+.oc-dot {
+    box-shadow: 0 0 12px currentColor;
+    animation: astra-status-pulse 1.8s infinite;
+}
+
+@keyframes astra-status-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .38; }
+}
+
+/* ================= HOLOGRAM EFFECT ================= */
+
+.astra-hologram,
+.oc-hologram {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.astra-hologram::after,
+.oc-hologram::after {
+    content: "";
+    position: absolute;
+    inset: -100% 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+        transparent 45%,
+        rgba(57, 232, 244, .08) 50%,
+        transparent 55%
+    );
+    animation: astra-scan 7s linear infinite;
+}
+
+@keyframes astra-scan {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(50%); }
+}
+
+/* ================= GLOW EFFECTS ================= */
+
+.astra-border-glow {
+    border: 1px solid var(--astra-border);
+    animation: astra-border-pulse 4s ease-in-out infinite;
+}
+
+@keyframes astra-border-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(57, 232, 244, .05);
+    }
+    50% {
+        box-shadow: 0 0 23px rgba(57, 232, 244, .16);
+    }
+}
+
+.astra-ai-glow {
+    border-radius: 50%;
+    box-shadow:
+        0 0 20px rgba(57, 232, 244, .45),
+        0 0 55px rgba(77, 166, 255, .24),
+        inset 0 0 25px rgba(57, 232, 244, .15);
+    animation: astra-float 4s ease-in-out infinite;
+}
+
+@keyframes astra-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+}
+
+/* ================= CHARTS ================= */
+
+canvas {
+    max-width: 100%;
+}
+
+.chart-container,
+.oc-chart-wrap {
+    min-height: 200px;
+    position: relative;
+}
+
+/* ================= LOADING ================= */
+
+.astra-loading {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(57, 232, 244, .15);
+    border-top-color: var(--astra-cyan);
+    border-radius: 50%;
+    animation: astra-spin .8s linear infinite;
+}
+
+@keyframes astra-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ================= SCROLLBARS ================= */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #1c5275 #071326;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #071326;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1c5275;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--astra-cyan);
+}
+
+/* ================= FOOTER ================= */
+
+.app-footer {
+    border-top: 1px solid var(--astra-border);
+    color: var(--astra-muted);
+    font-size: 10px;
+    line-height: 1.7;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1050px) {
+    .oc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .oc-layout-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .card,
+    .stat-card,
+    .panel,
+    .dashboard-card,
+    .oc-card {
+        border-radius: 13px;
+    }
+
+    td,
+    th {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+
+    .stat-value,
+    .metric-value {
+        font-size: 1.6rem;
+    }
+
+    .oc-quick-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .oc-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .oc-card {
+        padding: 12px;
+    }
+
+    .oc-card-value {
+        font-size: 19px;
+    }
+
+    .oc-hero h1 {
+        font-size: 22px;
+    }
+}
+
+/* ================= ACCESSIBILITY ================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}

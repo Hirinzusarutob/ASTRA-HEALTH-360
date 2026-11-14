@@ -1,0 +1,409 @@
+
+/* =========================================
+   ASTRA HEALTH 360 - GLOBAL DESIGN SYSTEM
+   ========================================= */
+
+:root {
+    --astra-bg: #080e1b;
+    --astra-panel: #101a2b;
+    --astra-panel-light: #16243a;
+    --astra-border: rgba(255, 255, 255, 0.09);
+
+    --astra-primary: #35e0c1;
+    --astra-secondary: #61aaff;
+    --astra-purple: #a78bfa;
+
+    --astra-text: #edf4ff;
+    --astra-muted: #94a4ba;
+
+    --astra-danger: #ff6878;
+    --astra-warning: #ffbd4a;
+    --astra-success: #35e0c1;
+
+    --sidebar-width: 255px;
+
+    --astra-radius: 14px;
+}
+
+/* Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: var(--astra-bg);
+}
+
+body {
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+
+    color: var(--astra-text);
+    background:
+        radial-gradient(
+            ellipse at 80% 0%,
+            rgba(37, 105, 150, 0.12),
+            transparent 45%
+        ),
+        var(--astra-bg);
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Typography */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: var(--astra-text);
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 23px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+p {
+    color: var(--astra-muted);
+}
+
+a {
+    color: var(--astra-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: #8affea;
+}
+
+/* Main application layout */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Sidebar */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    display: flex;
+    flex-direction: column;
+
+    width: var(--sidebar-width);
+    height: 100vh;
+
+    padding: 24px 16px;
+
+    overflow-y: auto;
+
+    background: rgba(10, 19, 34, 0.97);
+    border-right: 1px solid var(--astra-border);
+
+    backdrop-filter: blur(20px);
+}
+
+.sidebar h1,
+.sidebar h2,
+.sidebar h3 {
+    margin-bottom: 20px;
+}
+
+.sidebar nav,
+.sidebar .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.sidebar nav a,
+.sidebar .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 14px;
+
+    color: var(--astra-muted);
+    font-size: 13px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    transition: all 0.25s ease;
+}
+
+.sidebar nav a:hover,
+.sidebar .nav-links a:hover {
+    color: var(--astra-text);
+    background: rgba(53, 224, 193, 0.07);
+}
+
+.sidebar nav a.active,
+.sidebar .nav-links a.active {
+    color: var(--astra-primary);
+    background: rgba(53, 224, 193, 0.1);
+    border-color: rgba(53, 224, 193, 0.2);
+}
+
+/* Main content */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    min-height: 100vh;
+
+    margin-left: var(--sidebar-width);
+}
+
+/* Top navigation */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    min-height: 72px;
+    padding: 14px 30px;
+
+    background: rgba(8, 14, 27, 0.88);
+    border-bottom: 1px solid var(--astra-border);
+
+    backdrop-filter: blur(18px);
+}
+
+.topbar p {
+    font-size: 12px;
+}
+
+/* Page content */
+
+.page-content {
+    width: 100%;
+    max-width: 1800px;
+
+    padding: 28px 30px;
+    margin: 0 auto;
+}
+
+.page-content > * {
+    min-width: 0;
+}
+
+/* General panels */
+
+.card,
+.panel,
+.dashboard-card {
+    background: var(--astra-panel);
+    border: 1px solid var(--astra-border);
+    border-radius: var(--astra-radius);
+}
+
+.card,
+.panel {
+    padding: 20px;
+}
+
+/* Buttons */
+
+button {
+    padding: 10px 17px;
+
+    color: var(--astra-bg);
+    background: var(--astra-primary);
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+button:hover {
+    background: #78f2dc;
+    box-shadow: 0 4px 18px rgba(53, 224, 193, 0.16);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Inputs */
+
+input,
+select,
+textarea {
+    padding: 12px 14px;
+
+    color: var(--astra-text);
+    background: var(--astra-panel-light);
+
+    border: 1px solid var(--astra-border);
+    border-radius: 9px;
+
+    outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--astra-primary);
+    box-shadow: 0 0 0 3px rgba(53, 224, 193, 0.08);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #73839b;
+}
+
+/* Status indicators */
+
+.online,
+.status-online {
+    color: var(--astra-success);
+}
+
+.offline,
+.status-offline {
+    color: var(--astra-danger);
+}
+
+.online-dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    margin-right: 7px;
+
+    background: var(--astra-success);
+    border-radius: 50%;
+
+    box-shadow: 0 0 10px rgba(53, 224, 193, 0.6);
+}
+
+/* Utility classes */
+
+.text-muted {
+    color: var(--astra-muted);
+}
+
+.text-success {
+    color: var(--astra-success);
+}
+
+.text-danger {
+    color: var(--astra-danger);
+}
+
+.text-warning {
+    color: var(--astra-warning);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Focus accessibility */
+
+:focus-visible {
+    outline: 2px solid var(--astra-primary);
+    outline-offset: 3px;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--astra-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30445e;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--astra-primary);
+}
+
+/* Selection */
+
+::selection {
+    color: var(--astra-bg);
+    background: var(--astra-primary);
+}
+
+/* Responsive foundation */
+
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .topbar {
+        position: relative;
+        padding: 14px 16px;
+    }
+
+    .page-content {
+        padding: 18px 14px;
+    }
+}

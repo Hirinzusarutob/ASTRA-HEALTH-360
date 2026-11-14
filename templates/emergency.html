@@ -1,0 +1,220 @@
+
+{% extends "base.html" %}
+
+{% block title %}Emergency Control | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}Mission Emergency Control Centre{% endblock %}
+
+{% block head %}
+<style>
+.emergency-banner {
+    padding: 23px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background: linear-gradient(115deg,#431d2b,#24172c);
+    border: 1px solid rgba(255,93,105,.3);
+}
+.emergency-banner h2 {
+    color: #ffe9ec;
+    margin-top: 0;
+}
+.emergency-banner p {
+    color: #e4b7c0;
+    margin-bottom: 0;
+}
+.emergency-stats {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.emergency-stat {
+    padding: 18px;
+    border-radius: 13px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.16);
+}
+.emergency-stat span {
+    color: #9fb4c9;
+    font-size: 12px;
+}
+.emergency-stat strong {
+    display: block;
+    margin-top: 9px;
+    font-size: 28px;
+    color: #f0f7ff;
+}
+.emergency-panel {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.75);
+    border: 1px solid rgba(125,180,220,.16);
+}
+.emergency-panel h3 {
+    margin-top: 0;
+    color: #eaf4ff;
+}
+.emergency-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 14px 0;
+}
+.emergency-button {
+    padding: 11px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #b83e50;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+.emergency-button.secondary {
+    background: #24435f;
+}
+.emergency-button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+.emergency-feedback {
+    color: #a9bfd3;
+    font-size: 13px;
+}
+.alert-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 15px;
+}
+.alert-card {
+    padding: 17px;
+    border-radius: 12px;
+    background: #10243a;
+    border: 1px solid rgba(125,180,220,.2);
+}
+.alert-card h4 {
+    color: #f0f7ff;
+    margin: 0 0 9px;
+}
+.alert-card p {
+    color: #a9bfd3;
+    line-height: 1.5;
+}
+.alert-meta {
+    color: #8fb4d3;
+    font-size: 12px;
+}
+.alert-card.severity-critical {
+    border-left: 4px solid #ff5d69;
+}
+.alert-card.severity-high {
+    border-left: 4px solid #ff984f;
+}
+.alert-card.severity-medium {
+    border-left: 4px solid #f4bd48;
+}
+.alert-card.severity-low {
+    border-left: 4px solid #22d6a0;
+}
+.alert-card button {
+    padding: 8px 12px;
+    margin: 5px 5px 0 0;
+    border: 1px solid rgba(100,180,230,.35);
+    border-radius: 7px;
+    background: #123b58;
+    color: white;
+    cursor: pointer;
+}
+.alert-card button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+@media(max-width:850px) {
+    .emergency-stats { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:650px) {
+    .alert-grid { grid-template-columns: 1fr; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="emergency-banner">
+    <h2>MISSION EMERGENCY RESPONSE CENTRE</h2>
+    <p>
+        Monitor recorded mission alerts, review severity and update
+        response status. Follow official mission emergency protocols.
+    </p>
+    <p class="emergency-feedback" id="emergency-last-updated">
+        Connecting to alert database...
+    </p>
+</section>
+
+<section class="emergency-stats">
+    <article class="emergency-stat">
+        <span>TOTAL ALERTS</span>
+        <strong id="emergency-total">--</strong>
+    </article>
+
+    <article class="emergency-stat">
+        <span>ACTIVE ALERTS</span>
+        <strong id="emergency-active">--</strong>
+    </article>
+
+    <article class="emergency-stat">
+        <span>CRITICAL ALERTS</span>
+        <strong id="emergency-critical">--</strong>
+    </article>
+
+    <article class="emergency-stat">
+        <span>RESOLVED ALERTS</span>
+        <strong id="emergency-resolved">--</strong>
+    </article>
+</section>
+
+<section class="emergency-panel">
+    <h3>Emergency Controls</h3>
+
+    <p class="emergency-feedback">
+        Create a clearly labelled test alert to verify the emergency
+        management workflow.
+    </p>
+
+    <div class="emergency-actions">
+        <button class="emergency-button"
+                id="create-test-alert" type="button">
+            Create Test Alert
+        </button>
+
+        <button class="emergency-button secondary"
+                id="refresh-alerts" type="button">
+            Refresh Alerts
+        </button>
+    </div>
+
+    <p id="emergency-feedback" class="emergency-feedback"
+       role="status" aria-live="polite"></p>
+</section>
+
+<section class="emergency-panel">
+    <h3>Mission Alert Register</h3>
+
+    <div id="emergency-alert-list" class="alert-grid">
+        <p class="emergency-feedback">Loading mission alerts...</p>
+    </div>
+</section>
+
+<section class="emergency-panel">
+    <h3>Emergency Response Notice</h3>
+    <p class="emergency-feedback">
+        ASTRA HEALTH 360 records and manages alerts. It does not independently
+        dispatch rescue teams or contact emergency services. Critical events
+        must be escalated through the mission's authorized response system.
+    </p>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/emergency.js') }}"></script>
+{% endblock %}

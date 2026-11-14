@@ -1,0 +1,104 @@
+
+{% extends "base.html" %}
+
+{% block title %}Medication Inventory | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}Medication Inventory{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>Medication Management</h1>
+        <p>Monitor onboard medical supplies and stock availability.</p>
+    </div>
+    <div class="status-badge">
+        <span class="online-dot"></span>
+        INVENTORY DATABASE
+    </div>
+</div>
+
+<!-- INVENTORY SUMMARY -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-label">MEDICINE ITEMS</div>
+        <div class="stat-value" id="medicine-count">0</div>
+        <div class="stat-description">Registered inventory items</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">LOW STOCK ITEMS</div>
+        <div class="stat-value" id="reminder-count">0</div>
+        <div class="stat-description">Items requiring stock review</div>
+    </div>
+
+</div>
+
+<!-- MEDICATION INVENTORY -->
+<div class="dashboard-panel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Onboard Medical Supplies</h2>
+            <p>Live records retrieved from the mission database.</p>
+        </div>
+
+        <button type="button" class="astra-button" id="test-reminder">
+            Check Stock
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ITEM NAME</th>
+                    <th>QUANTITY</th>
+                    <th>MINIMUM STOCK</th>
+                    <th>STATUS</th>
+                    <th>NOTES</th>
+                </tr>
+            </thead>
+
+            <tbody id="medication-list">
+                <tr>
+                    <td colspan="5">Loading medication inventory...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p id="reminder-feedback" class="form-feedback" aria-live="polite"></p>
+
+</div>
+
+<!-- ADD INVENTORY INFORMATION -->
+<div class="dashboard-panel">
+    <div class="panel-header">
+        <div>
+            <h2>Inventory Management</h2>
+            <p>Medication stock entries are managed through the backend API.</p>
+        </div>
+    </div>
+
+    <p>
+        Authorized mission personnel should record and verify medical
+        inventory through the medication inventory API.
+    </p>
+</div>
+
+<div class="dashboard-panel">
+    <h3>Medical Safety Notice</h3>
+    <p>
+        This module tracks inventory quantities only. It does not recommend
+        medication, prescribe treatment, or calculate dosages. All medical
+        decisions must be made by qualified mission medical personnel.
+    </p>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/medication.js') }}"></script>
+{% endblock %}

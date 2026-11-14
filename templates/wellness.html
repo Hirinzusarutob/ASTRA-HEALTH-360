@@ -1,0 +1,189 @@
+
+{% extends "base.html" %}
+
+{% block title %}Crew Wellness | ASTRA HEALTH 360{% endblock %}
+{% block page_heading %}Crew Wellness Monitoring{% endblock %}
+
+{% block head %}
+<style>
+.wellness-intro {
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: linear-gradient(115deg,#153c46,#142c3c,#182c49);
+    border: 1px solid rgba(70,220,190,.2);
+}
+.wellness-intro h2 { margin-top: 0; color: #eafffa; }
+.wellness-intro p { color: #b4d1d2; line-height: 1.6; }
+.wellness-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 18px;
+}
+.wellness-panel {
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.wellness-panel h3 { margin-top: 0; color: #eaf7ff; }
+.wellness-panel p { color: #afc3d6; line-height: 1.6; }
+.wellness-form {
+    display: grid;
+    gap: 13px;
+}
+.wellness-form label {
+    color: #c6d9e8;
+    font-size: 13px;
+}
+.wellness-form select,
+.wellness-form textarea {
+    width: 100%;
+    margin-top: 7px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(125,180,220,.3);
+    background: #0b192b;
+    color: #eaf4ff;
+    font: inherit;
+    box-sizing: border-box;
+}
+.wellness-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.wellness-submit {
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #168d83;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+.wellness-submit:disabled { opacity: .6; cursor: wait; }
+.wellness-feedback {
+    min-height: 20px;
+    color: #72e4bd;
+    font-size: 13px;
+}
+.wellness-history {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(18,35,57,.85);
+    border: 1px solid rgba(125,180,220,.17);
+}
+.wellness-history h3 { color: #eaf7ff; }
+.wellness-history table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.wellness-history th,
+.wellness-history td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(125,180,220,.13);
+    color: #c6d9e8;
+    font-size: 13px;
+}
+.wellness-history th { color: #80d9dc; }
+.wellness-empty { color: #a9bfd3; padding: 15px 0; }
+@media(max-width:700px) {
+    .wellness-grid { grid-template-columns: 1fr; }
+    .wellness-history { overflow-x: auto; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="wellness-intro">
+    <h2>Mission Crew Wellness Centre</h2>
+    <p>
+        Record crew mood and general well-being during space missions.
+        Monitor check-in history to help mission personnel identify
+        wellness concerns and provide appropriate support.
+    </p>
+</section>
+
+<div class="wellness-grid">
+
+    <section class="wellness-panel">
+        <h3>Daily Wellness Check-in</h3>
+        <p>Submit a crew member's voluntary wellness check-in.</p>
+
+        <form id="wellness-form" class="wellness-form">
+
+            <label for="wellness-crew">
+                Crew Member
+                <select id="wellness-crew" name="crew_id">
+                    <option value="">General mission check-in</option>
+                </select>
+            </label>
+
+            <label for="wellness-mood">
+                Current Mood
+                <select id="wellness-mood" name="mood" required>
+                    <option value="">Select mood</option>
+                    <option value="Positive">Positive</option>
+                    <option value="Neutral">Neutral</option>
+                    <option value="Low">Low</option>
+                </select>
+            </label>
+
+            <label for="wellness-notes">
+                Notes (optional)
+                <textarea id="wellness-notes"
+                          name="notes"
+                          maxlength="1000"
+                          placeholder="Describe how the crew member is feeling..."></textarea>
+            </label>
+
+            <button type="submit"
+                    id="wellness-submit"
+                    class="wellness-submit">
+                Save Wellness Check-in
+            </button>
+
+            <div id="wellness-feedback"
+                 class="wellness-feedback"
+                 role="status"
+                 aria-live="polite"></div>
+        </form>
+    </section>
+
+    <section class="wellness-panel">
+        <h3>Wellness Guidance</h3>
+
+        <p><strong>Positive mood:</strong> Continue healthy routines,
+        communication and regular rest.</p>
+
+        <p><strong>Neutral mood:</strong> Encourage regular check-ins,
+        social connection and relaxation activities.</p>
+
+        <p><strong>Low mood:</strong> Offer supportive communication and
+        contact authorized mission medical or psychological personnel
+        when needed.</p>
+
+        <p>
+            Sleep duration, stress levels and clinical mental-health
+            assessments are not measured by this check-in form.
+        </p>
+    </section>
+
+</div>
+
+<section class="wellness-history">
+    <h3>Wellness Check-in History</h3>
+
+    <div id="wellness-history">
+        <p class="wellness-empty">Loading wellness records...</p>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/wellness.js') }}"></script>
+{% endblock %}
