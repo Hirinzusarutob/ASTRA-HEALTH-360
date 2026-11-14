@@ -947,7 +947,7 @@
                 fetchJSON(CONFIG.crewEndpoint)
             ]);
 
-            const healthRecords = extractArray(
+            let healthRecords = extractArray(
                 healthPayload,
                 ["records", "health", "readings", "data"]
             );
@@ -956,6 +956,37 @@
                 crewPayload,
                 ["crew", "members", "records", "data"]
             );
+
+            // DEMO MODE: If the database has crew but no saved health
+            // records, generate one clearly labelled simulated reading
+            // per crew member. This runs only while the health table is
+            // empty; the 15-second refresh will not keep adding records.
+            if (healthRecords.length === 0 && crewMembers.length > 0) {
+                const seedResponse = await fetch("/api/iot/readings", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json"
+                    },
+                    body: JSON.stringify({ all: true })
+                });
+
+                const seedPayload = await seedResponse.json().catch(() => ({}));
+
+                if (!seedResponse.ok || seedPayload.success === false) {
+                    throw new Error(
+                        seedPayload.error ||
+                        seedPayload.message ||
+                        "Unable to create demo readings."
+                    );
+                }
+
+                const refreshedHealth = await fetchJSON(CONFIG.healthEndpoint);
+                healthRecords = extractArray(
+                    refreshedHealth,
+                    ["records", "health", "readings", "data"]
+                );
+            }
 
             state.healthRecords = healthRecords;
             state.crewMembers = crewMembers;
