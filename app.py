@@ -6,12 +6,15 @@ from functools import wraps
 from flask import Flask, jsonify, render_template, request
 
 from config import Config
+
 from services.ai_service import ask_astra
+
 from services.health_service import (
     save_health_record,
     get_all_health_records,
     get_latest_health_record
 )
+
 from services.alert_service import (
     create_alert,
     get_all_alerts,
@@ -19,23 +22,28 @@ from services.alert_service import (
     update_alert_status,
     delete_alert
 )
+
 from services.simulation_service import (
     simulate_crew_health,
     simulate_all_crew_health,
     get_simulation_summary
 )
+
 from services.mission_intelligence import (
     analyse_health_reading,
     analyse_multiple_readings
 )
+
 from services.iot_service import (
     generate_sensor_network,
     get_sensor_status
 )
+
 from services.space_tracking_service import (
     get_iss_position,
     get_tracking_status
 )
+
 from services.satellite_service import (
     transmit_message,
     get_message_history,
@@ -47,10 +55,16 @@ from services.dataset_service import (
     get_dataset_records
 )
 
+
+# ==================================================
+# FLASK APPLICATION CONFIGURATION
+# ==================================================
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
 database_folder = os.path.dirname(Config.DATABASE_PATH)
+
 if database_folder:
     os.makedirs(database_folder, exist_ok=True)
 
@@ -96,123 +110,148 @@ def crew_exists(connection, crew_id):
 def initialize_database():
     connection = get_db_connection()
 
-    connection.executescript("""
-        CREATE TABLE IF NOT EXISTS crew (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            role TEXT,
-            mission_status TEXT DEFAULT 'Active',
-            notes TEXT DEFAULT ''
-        );
+    try:
+        connection.executescript("""
+            CREATE TABLE IF NOT EXISTS crew (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                role TEXT,
+                mission_status TEXT DEFAULT 'Active',
+                notes TEXT DEFAULT ''
+            );
 
-        CREATE TABLE IF NOT EXISTS health_records (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            crew_id INTEGER,
-            heart_rate REAL,
-            oxygen_level REAL,
-            body_temperature REAL,
-            recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (crew_id) REFERENCES crew(id)
-        );
+            CREATE TABLE IF NOT EXISTS health_records (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                crew_id INTEGER,
+                heart_rate REAL,
+                oxygen_level REAL,
+                body_temperature REAL,
+                recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (crew_id) REFERENCES crew(id)
+            );
 
-        CREATE TABLE IF NOT EXISTS alerts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            severity TEXT,
-            status TEXT DEFAULT 'Active',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+            CREATE TABLE IF NOT EXISTS alerts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                severity TEXT,
+                status TEXT DEFAULT 'Active',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        CREATE TABLE IF NOT EXISTS wellness_checkins (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            crew_id INTEGER,
-            mood TEXT NOT NULL,
-            recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+            CREATE TABLE IF NOT EXISTS wellness_checkins (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                crew_id INTEGER,
+                mood TEXT NOT NULL,
+                recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        CREATE TABLE IF NOT EXISTS fitness_sessions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            crew_id INTEGER,
-            duration_minutes INTEGER,
-            calories_burned INTEGER,
-            recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+            CREATE TABLE IF NOT EXISTS fitness_sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                crew_id INTEGER,
+                duration_minutes INTEGER,
+                calories_burned INTEGER,
+                recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        CREATE TABLE IF NOT EXISTS inventory (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            item_name TEXT NOT NULL,
-            quantity INTEGER DEFAULT 0,
-            minimum_quantity INTEGER DEFAULT 1
-        );
+            CREATE TABLE IF NOT EXISTS inventory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                item_name TEXT NOT NULL,
+                quantity INTEGER DEFAULT 0,
+                minimum_quantity INTEGER DEFAULT 1
+            );
 
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            channel TEXT NOT NULL,
-            message TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+            CREATE TABLE IF NOT EXISTS messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                channel TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        CREATE TABLE IF NOT EXISTS environment_records (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            cabin_temperature REAL,
-            cabin_pressure REAL,
-            cabin_oxygen REAL,
-            cabin_humidity REAL,
-            source TEXT DEFAULT 'SENSOR',
-            recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+            CREATE TABLE IF NOT EXISTS environment_records (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cabin_temperature REAL,
+                cabin_pressure REAL,
+                cabin_oxygen REAL,
+                cabin_humidity REAL,
+                source TEXT DEFAULT 'SENSOR',
+                recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
 
-        CREATE TABLE IF NOT EXISTS medication_inventory (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            item_name TEXT NOT NULL,
-            quantity INTEGER DEFAULT 0,
-            minimum_quantity INTEGER DEFAULT 1,
-            notes TEXT DEFAULT '',
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    """)
+            CREATE TABLE IF NOT EXISTS medication_inventory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                item_name TEXT NOT NULL,
+                quantity INTEGER DEFAULT 0,
+                minimum_quantity INTEGER DEFAULT 1,
+                notes TEXT DEFAULT '',
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
 
-    # Safely extend older database tables.
-    add_column_if_missing(
-        connection, "crew", "notes", "TEXT DEFAULT ''"
-    )
-    add_column_if_missing(
-        connection, "inventory", "category", "TEXT DEFAULT 'General'"
-    )
-    add_column_if_missing(
-        connection, "inventory", "unit", "TEXT DEFAULT 'units'"
-    )
-    add_column_if_missing(
-        connection, "messages", "sender", "TEXT DEFAULT 'Crew Member'"
-    )
-    add_column_if_missing(
-        connection, "alerts", "description", "TEXT DEFAULT ''"
-    )
-    add_column_if_missing(
-        connection, "health_records", "source", "TEXT DEFAULT 'UNKNOWN'"
-    )
+        # Safely extend older database tables.
+        add_column_if_missing(
+            connection, "crew", "notes", "TEXT DEFAULT ''"
+        )
 
-    crew_count = connection.execute(
-        "SELECT COUNT(*) FROM crew"
-    ).fetchone()[0]
+        add_column_if_missing(
+            connection, "inventory", "category",
+            "TEXT DEFAULT 'General'"
+        )
 
-    if crew_count == 0:
-        crew_members = [
-            ("Alex Morgan", "Mission Commander", "Active"),
-            ("Sarah Chen", "Flight Engineer", "Active"),
-            ("David Wilson", "Medical Officer", "Active"),
-            ("Maya Patel", "Scientist", "Active"),
-            ("Ryan Cooper", "Pilot", "Active"),
-            ("Elena Rodriguez", "Mission Specialist", "Active")
-        ]
+        add_column_if_missing(
+            connection, "inventory", "unit",
+            "TEXT DEFAULT 'units'"
+        )
 
-        connection.executemany("""
-            INSERT INTO crew (name, role, mission_status)
-            VALUES (?, ?, ?)
-        """, crew_members)
+        add_column_if_missing(
+            connection, "messages", "sender",
+            "TEXT DEFAULT 'Crew Member'"
+        )
 
-    connection.commit()
-    connection.close()
+        add_column_if_missing(
+            connection, "alerts", "description",
+            "TEXT DEFAULT ''"
+        )
+
+        add_column_if_missing(
+            connection, "health_records", "source",
+            "TEXT DEFAULT 'UNKNOWN'"
+        )
+
+        crew_count = connection.execute(
+            "SELECT COUNT(*) FROM crew"
+        ).fetchone()[0]
+
+        if crew_count == 0:
+            crew_members = [
+                ("Alex Morgan", "Mission Commander", "Active"),
+                ("Sarah Chen", "Flight Engineer", "Active"),
+                ("David Wilson", "Medical Officer", "Active"),
+                ("Maya Patel", "Scientist", "Active"),
+                ("Ryan Cooper", "Pilot", "Active"),
+                ("Elena Rodriguez", "Mission Specialist", "Active")
+            ]
+
+            connection.executemany("""
+                INSERT INTO crew (name, role, mission_status)
+                VALUES (?, ?, ?)
+            """, crew_members)
+
+        connection.commit()
+
+    except Exception:
+        connection.rollback()
+        app.logger.exception("Database initialization failed")
+        raise
+
+    finally:
+        connection.close()
+
+
+# IMPORTANT:
+# This runs when Render/Gunicorn imports this module.
+# Do not move this inside the __main__ block.
+
+initialize_database()
 
 
 # ==================================================
@@ -293,11 +332,15 @@ def api_crew():
 
         if not name or not role:
             connection.close()
-            return jsonify({"error": "Name and role are required"}), 400
+            return jsonify({
+                "error": "Name and role are required"
+            }), 400
 
         if len(name) > 100 or len(role) > 100:
             connection.close()
-            return jsonify({"error": "Name or role is too long"}), 400
+            return jsonify({
+                "error": "Name or role is too long"
+            }), 400
 
         cursor = connection.execute("""
             INSERT INTO crew (name, role)
@@ -305,6 +348,7 @@ def api_crew():
         """, (name, role))
 
         crew_id = cursor.lastrowid
+
         connection.commit()
         connection.close()
 
@@ -318,6 +362,7 @@ def api_crew():
     ).fetchall()
 
     connection.close()
+
     return jsonify([dict(member) for member in crew])
 
 
@@ -334,7 +379,6 @@ def manage_crew_member(crew_id):
         return jsonify({"error": "Crew member not found"}), 404
 
     if request.method == "DELETE":
-        # Preserve historical records by preventing accidental deletion.
         has_records = connection.execute("""
             SELECT
                 (SELECT COUNT(*) FROM health_records WHERE crew_id = ?) +
@@ -351,6 +395,7 @@ def manage_crew_member(crew_id):
         connection.execute(
             "DELETE FROM crew WHERE id = ?", (crew_id,)
         )
+
         connection.commit()
         connection.close()
 
@@ -360,6 +405,7 @@ def manage_crew_member(crew_id):
 
     name = str(data.get("name", member["name"])).strip()
     role = str(data.get("role", member["role"] or "")).strip()
+
     status = str(
         data.get("mission_status", member["mission_status"])
     ).strip()
@@ -390,8 +436,6 @@ def manage_crew_member(crew_id):
 # HEALTH MONITORING
 # ==================================================
 
-
-
 @app.route("/api/health", methods=["GET", "POST"])
 def api_health():
     if request.method == "POST":
@@ -415,6 +459,7 @@ def api_health():
                 data["body_temperature"],
                 source="SENSOR"
             )
+
             return jsonify(result), 201
 
         except (ValueError, TypeError) as error:
@@ -422,12 +467,21 @@ def api_health():
 
         except Exception:
             app.logger.exception("Health record could not be saved")
-            return jsonify({"error": "Unable to save health record"}), 500
+            return jsonify({
+                "error": "Unable to save health record"
+            }), 500
 
     crew_id = request.args.get("crew_id", type=int)
-    records = get_all_health_records(crew_id=crew_id)
 
-    return jsonify(records)
+    try:
+        records = get_all_health_records(crew_id=crew_id)
+        return jsonify(records)
+
+    except Exception:
+        app.logger.exception("Health records could not be retrieved")
+        return jsonify({
+            "error": "Unable to retrieve health records"
+        }), 500
 
 
 @app.route("/api/health/latest/<int:crew_id>")
@@ -495,8 +549,18 @@ def api_alerts():
         except (ValueError, TypeError) as error:
             return jsonify({"error": str(error)}), 400
 
+        except Exception:
+            app.logger.exception("Alert creation failed")
+            return jsonify({"error": "Unable to create alert"}), 500
+
     status = request.args.get("status")
-    return jsonify(get_all_alerts(status=status))
+
+    try:
+        return jsonify(get_all_alerts(status=status))
+
+    except Exception:
+        app.logger.exception("Alert retrieval failed")
+        return jsonify({"error": "Unable to retrieve alerts"}), 500
 
 
 @app.route("/api/alerts/count")
@@ -550,6 +614,7 @@ def api_assistant():
 
     except Exception:
         app.logger.exception("ASTRA AI error")
+
         return jsonify({
             "error": "ASTRA AI is unavailable. Check that Ollama is running and the model is installed."
         }), 503
@@ -576,6 +641,7 @@ def api_wellness():
         if crew_id is not None:
             try:
                 crew_id = int(crew_id)
+
             except (ValueError, TypeError):
                 connection.close()
                 return jsonify({"error": "Invalid crew ID"}), 400
@@ -592,7 +658,9 @@ def api_wellness():
         connection.commit()
         connection.close()
 
-        return jsonify({"message": "Wellness check-in saved"}), 201
+        return jsonify({
+            "message": "Wellness check-in saved"
+        }), 201
 
     records = connection.execute("""
         SELECT wellness_checkins.*, crew.name AS crew_name
@@ -603,6 +671,7 @@ def api_wellness():
     """).fetchall()
 
     connection.close()
+
     return jsonify([dict(row) for row in records])
 
 
@@ -630,11 +699,15 @@ def api_fitness():
 
             if not crew_exists(connection, crew_id):
                 connection.close()
-                return jsonify({"error": "Crew member not found"}), 404
+                return jsonify({
+                    "error": "Crew member not found"
+                }), 404
 
         except (ValueError, TypeError):
             connection.close()
-            return jsonify({"error": "Invalid workout details"}), 400
+            return jsonify({
+                "error": "Invalid workout details"
+            }), 400
 
         connection.execute("""
             INSERT INTO fitness_sessions
@@ -656,6 +729,7 @@ def api_fitness():
     """).fetchall()
 
     connection.close()
+
     return jsonify([dict(row) for row in records])
 
 
@@ -686,7 +760,9 @@ def api_inventory():
 
         except (ValueError, TypeError):
             connection.close()
-            return jsonify({"error": "Invalid inventory details"}), 400
+            return jsonify({
+                "error": "Invalid inventory details"
+            }), 400
 
         connection.execute("""
             INSERT INTO inventory
@@ -697,13 +773,16 @@ def api_inventory():
         connection.commit()
         connection.close()
 
-        return jsonify({"message": "Inventory item added"}), 201
+        return jsonify({
+            "message": "Inventory item added"
+        }), 201
 
     items = connection.execute(
         "SELECT * FROM inventory ORDER BY item_name"
     ).fetchall()
 
     connection.close()
+
     return jsonify([dict(item) for item in items])
 
 
@@ -717,21 +796,27 @@ def manage_inventory_item(item_id):
 
     if not item:
         connection.close()
-        return jsonify({"error": "Inventory item not found"}), 404
+        return jsonify({
+            "error": "Inventory item not found"
+        }), 404
 
     if request.method == "DELETE":
         connection.execute(
             "DELETE FROM inventory WHERE id = ?", (item_id,)
         )
+
         connection.commit()
         connection.close()
 
-        return jsonify({"message": "Inventory item deleted"})
+        return jsonify({
+            "message": "Inventory item deleted"
+        })
 
     data = request.get_json(silent=True) or {}
 
     try:
         quantity = int(data.get("quantity", item["quantity"]))
+
         minimum = int(
             data.get("minimum_quantity", item["minimum_quantity"])
         )
@@ -741,7 +826,9 @@ def manage_inventory_item(item_id):
 
     except (ValueError, TypeError):
         connection.close()
-        return jsonify({"error": "Invalid stock quantity"}), 400
+        return jsonify({
+            "error": "Invalid stock quantity"
+        }), 400
 
     connection.execute("""
         UPDATE inventory
@@ -771,6 +858,7 @@ def api_medication():
 
     if request.method == "POST":
         data = request.get_json(silent=True) or {}
+
         name = str(data.get("item_name", "")).strip()
 
         try:
@@ -782,7 +870,9 @@ def api_medication():
 
         except (ValueError, TypeError):
             connection.close()
-            return jsonify({"error": "Invalid medication inventory details"}), 400
+            return jsonify({
+                "error": "Invalid medication inventory details"
+            }), 400
 
         notes = str(data.get("notes", "")).strip()
 
@@ -795,7 +885,9 @@ def api_medication():
         connection.commit()
         connection.close()
 
-        return jsonify({"message": "Medication inventory item saved"}), 201
+        return jsonify({
+            "message": "Medication inventory item saved"
+        }), 201
 
     records = connection.execute("""
         SELECT * FROM medication_inventory
@@ -803,6 +895,7 @@ def api_medication():
     """).fetchall()
 
     connection.close()
+
     return jsonify([dict(row) for row in records])
 
 
@@ -830,26 +923,39 @@ def api_environment():
             temperature, pressure, oxygen, humidity = values
 
             if not 0 <= temperature <= 100:
-                raise ValueError("Temperature outside accepted range")
+                raise ValueError(
+                    "Temperature outside accepted range"
+                )
 
             if not 0 <= pressure <= 200:
-                raise ValueError("Pressure outside accepted range")
+                raise ValueError(
+                    "Pressure outside accepted range"
+                )
 
             if not 0 <= oxygen <= 100:
-                raise ValueError("Oxygen outside accepted range")
+                raise ValueError(
+                    "Oxygen outside accepted range"
+                )
 
             if not 0 <= humidity <= 100:
-                raise ValueError("Humidity outside accepted range")
+                raise ValueError(
+                    "Humidity outside accepted range"
+                )
 
         except (KeyError, ValueError, TypeError) as error:
             connection.close()
-            return jsonify({"error": str(error) or "Invalid environment readings"}), 400
+
+            return jsonify({
+                "error": str(error) or "Invalid environment readings"
+            }), 400
 
         source = str(data.get("source", "SENSOR")).upper()
 
         if source not in ["SENSOR", "SIMULATED"]:
             connection.close()
-            return jsonify({"error": "Invalid data source"}), 400
+            return jsonify({
+                "error": "Invalid data source"
+            }), 400
 
         connection.execute("""
             INSERT INTO environment_records (
@@ -860,7 +966,13 @@ def api_environment():
                 source
             )
             VALUES (?, ?, ?, ?, ?)
-        """, (temperature, pressure, oxygen, humidity, source))
+        """, (
+            temperature,
+            pressure,
+            oxygen,
+            humidity,
+            source
+        ))
 
         connection.commit()
         connection.close()
@@ -914,7 +1026,9 @@ def api_messages():
         connection.commit()
         connection.close()
 
-        return jsonify({"message": "Local message saved"}), 201
+        return jsonify({
+            "message": "Local message saved"
+        }), 201
 
     messages = connection.execute("""
         SELECT * FROM messages
@@ -923,8 +1037,8 @@ def api_messages():
     """).fetchall()
 
     connection.close()
-    return jsonify([dict(message) for message in messages])
 
+    return jsonify([dict(message) for message in messages])
 
 
 # ==================================================
@@ -934,6 +1048,7 @@ def api_messages():
 @app.route("/api/mission/analyse", methods=["POST"])
 def api_mission_analyse():
     """Analyse one health reading with the experimental ML model."""
+
     data = request.get_json(silent=True) or {}
 
     reading = {
@@ -947,21 +1062,30 @@ def api_mission_analyse():
     }
 
     result = analyse_health_reading(reading)
-    return jsonify(result), (200 if result.get("success") else 400)
+
+    return jsonify(result), (
+        200 if result.get("success") else 400
+    )
 
 
 @app.route("/api/mission/intelligence", methods=["GET"])
 def api_mission_intelligence():
     """Analyse recent saved health records for anomaly patterns."""
+
     try:
         crew_id = request.args.get("crew_id", type=int)
-        limit = request.args.get("limit", default=100, type=int)
+
+        limit = request.args.get(
+            "limit", default=100, type=int
+        )
+
         limit = max(1, min(limit, 500))
 
         records = get_all_health_records(crew_id=crew_id)
         records = records[:limit]
 
         prepared = []
+
         for record in records:
             prepared.append({
                 "heart_rate": record.get("heart_rate"),
@@ -976,10 +1100,14 @@ def api_mission_intelligence():
             })
 
         result = analyse_multiple_readings(prepared)
+
         return jsonify(result)
 
     except Exception:
-        app.logger.exception("Mission intelligence analysis failed")
+        app.logger.exception(
+            "Mission intelligence analysis failed"
+        )
+
         return jsonify({
             "success": False,
             "error": "Unable to analyse saved health records."
@@ -993,6 +1121,7 @@ def api_mission_intelligence():
 @app.route("/api/iot/status", methods=["GET"])
 def api_iot_status():
     """Return simulated IoT sensor status."""
+
     return jsonify(get_sensor_status())
 
 
@@ -1000,21 +1129,31 @@ def api_iot_status():
 def api_iot_readings():
     """
     GET: generate simulated readings for all crew.
+
     POST: generate and save a simulated reading for one crew member,
-          or all crew members when all=true.
+    or all crew members when all=true.
     """
+
     try:
         if request.method == "GET":
             connection = get_db_connection()
+
             crew_rows = connection.execute(
                 "SELECT id, name FROM crew ORDER BY id"
             ).fetchall()
-            connection.close()
-            crew_members = [dict(row) for row in crew_rows]
 
-            return jsonify(generate_sensor_network(crew_members))
+            connection.close()
+
+            crew_members = [
+                dict(row) for row in crew_rows
+            ]
+
+            return jsonify(
+                generate_sensor_network(crew_members)
+            )
 
         data = request.get_json(silent=True) or {}
+
         save_all = data.get("all") is True
 
         connection = get_db_connection()
@@ -1023,13 +1162,20 @@ def api_iot_readings():
             crew_rows = connection.execute(
                 "SELECT id, name FROM crew ORDER BY id"
             ).fetchall()
-            crew_members = [dict(row) for row in crew_rows]
+
+            crew_members = [
+                dict(row) for row in crew_rows
+            ]
+
         else:
             crew_id = data.get("crew_id")
+
             try:
                 crew_id = int(crew_id)
+
             except (TypeError, ValueError):
                 connection.close()
+
                 return jsonify({
                     "success": False,
                     "error": "A valid crew_id is required."
@@ -1042,6 +1188,7 @@ def api_iot_readings():
 
             if not crew_row:
                 connection.close()
+
                 return jsonify({
                     "success": False,
                     "error": "Crew member not found."
@@ -1052,6 +1199,7 @@ def api_iot_readings():
         connection.close()
 
         network = generate_sensor_network(crew_members)
+
         saved = []
 
         for reading in network["readings"]:
@@ -1062,6 +1210,7 @@ def api_iot_readings():
                 reading["temperature"],
                 source="SIMULATED"
             )
+
             saved.append({
                 "crew_id": reading["crew_id"],
                 "crew_name": reading.get("crew_name"),
@@ -1084,7 +1233,10 @@ def api_iot_readings():
         }), 400
 
     except Exception:
-        app.logger.exception("Simulated IoT reading generation failed")
+        app.logger.exception(
+            "Simulated IoT reading generation failed"
+        )
+
         return jsonify({
             "success": False,
             "error": "Unable to generate simulated sensor readings."
@@ -1098,8 +1250,12 @@ def api_iot_readings():
 @app.route("/api/tracking/iss", methods=["GET"])
 def api_tracking_iss():
     """Return the current ISS position from the public tracking API."""
+
     result = get_iss_position()
-    return jsonify(result), (200 if result.get("success") else 503)
+
+    return jsonify(result), (
+        200 if result.get("success") else 503
+    )
 
 
 @app.route("/api/tracking/status", methods=["GET"])
@@ -1119,12 +1275,18 @@ def api_satellite_status():
 @app.route("/api/satellite/messages", methods=["GET", "POST"])
 def api_satellite_messages():
     """Read message history or simulate a spacecraft communication."""
+
     if request.method == "GET":
-        limit = request.args.get("limit", default=50, type=int)
+        limit = request.args.get(
+            "limit", default=50, type=int
+        )
+
         return jsonify(get_message_history(limit))
 
     data = request.get_json(silent=True) or {}
+
     message = data.get("message", "")
+
     direction = data.get(
         "direction",
         "SPACECRAFT_TO_CONTROL"
@@ -1133,7 +1295,9 @@ def api_satellite_messages():
     result = transmit_message(
         message=message,
         direction=direction,
-        simulate_failure=data.get("simulate_failure") is True
+        simulate_failure=(
+            data.get("simulate_failure") is True
+        )
     )
 
     if not result.get("success"):
@@ -1142,6 +1306,7 @@ def api_satellite_messages():
 
     return jsonify(result), 201
 
+
 # ==================================================
 # CSV DATASET API ROUTES
 # ==================================================
@@ -1149,6 +1314,7 @@ def api_satellite_messages():
 @app.route("/api/datasets", methods=["GET"])
 def api_datasets():
     """Return summary of all four CSV datasets."""
+
     try:
         summary = get_dataset_summary()
 
@@ -1160,6 +1326,7 @@ def api_datasets():
 
     except FileNotFoundError:
         app.logger.exception("CSV dataset file not found")
+
         return jsonify({
             "success": False,
             "error": "One or more CSV files are missing."
@@ -1167,6 +1334,7 @@ def api_datasets():
 
     except Exception:
         app.logger.exception("Dataset summary failed")
+
         return jsonify({
             "success": False,
             "error": "Unable to load dataset summary."
@@ -1176,11 +1344,17 @@ def api_datasets():
 @app.route("/api/datasets/<dataset_name>", methods=["GET"])
 def api_dataset_records(dataset_name):
     """Return records from a selected CSV dataset."""
+
     try:
-        limit = request.args.get("limit", default=50, type=int)
+        limit = request.args.get(
+            "limit", default=50, type=int
+        )
+
         limit = max(1, min(limit, 100))
 
-        records = get_dataset_records(dataset_name, limit)
+        records = get_dataset_records(
+            dataset_name, limit
+        )
 
         return jsonify({
             "success": True,
@@ -1197,29 +1371,32 @@ def api_dataset_records(dataset_name):
 
     except FileNotFoundError:
         app.logger.exception("CSV file not found")
+
         return jsonify({
             "success": False,
             "error": "Dataset file not found."
         }), 404
 
     except Exception:
-        app.logger.exception("Dataset records could not be loaded")
+        app.logger.exception(
+            "Dataset records could not be loaded"
+        )
+
         return jsonify({
             "success": False,
             "error": "Unable to load dataset records."
         }), 500
 
-# ==================================================
-# START APPLICATION
-# ==================================================
 
+# ==================================================
+# MEDICAL RECORDS API
+# ==================================================
 
 @app.route("/api/records", methods=["GET"])
 def get_medical_records():
-    """Return saved astronaut health records for the medical records page."""
-    try:
-        from services.health_service import get_all_health_records
+    """Return saved astronaut health records."""
 
+    try:
         records = get_all_health_records()
 
         return jsonify({
@@ -1228,7 +1405,9 @@ def get_medical_records():
         }), 200
 
     except Exception:
-        app.logger.exception("Medical records API failed")
+        app.logger.exception(
+            "Medical records API failed"
+        )
 
         return jsonify({
             "success": False,
@@ -1236,9 +1415,11 @@ def get_medical_records():
         }), 500
 
 
-if __name__ == "__main__":
-    initialize_database()
+# ==================================================
+# START APPLICATION
+# ==================================================
 
+if __name__ == "__main__":
     print("--------------------------------------")
     print(" ASTRA HEALTH 360")
     print(" Astronaut Health Monitoring System")
