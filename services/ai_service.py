@@ -1,123 +1,158 @@
+
 import os
+import logging
 import requests
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent"
+logger = logging.getLogger("ASTRA_AI")
+
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+OPENROUTER_MODEL = os.getenv(
+    "OPENROUTER_MODEL",
+    "openrouter/free"
+)
 
 SYSTEM_PROMPT = """
-You are ASTRA, the AI health-support assistant for ASTRA HEALTH 360,
-a health-monitoring platform designed for astronaut missions.
+You are ASTRA AI, the intelligent health-support assistant
+inside ASTRA HEALTH 360.
 
 Your responsibilities:
-1. Explain astronaut health-monitoring concepts.
-2. Help interpret stored heart rate, oxygen saturation and temperature
-   readings in an educational way.
-3. Explain exercise, hydration, sleep, nutrition and general wellness.
-4. Help users understand alerts and mission health reports.
-5. Answer questions about the ASTRA HEALTH 360 platform.
+1. Explain astronaut health and wellness.
+2. Explain heart rate, oxygen saturation and temperature readings.
+3. Help users understand health reports and alerts.
+4. Explain the effects of microgravity on the human body.
+5. Help users understand the ASTRA HEALTH 360 dashboard.
 
-Safety rules:
-- You are an educational support assistant, not a doctor.
-- Never claim to diagnose a disease or medical condition.
-- Never prescribe medicines or recommend medication dosages.
-- Do not invent sensor readings or claim that simulated data is real.
-- Clearly explain when information is missing.
-- For a serious or potentially life-threatening situation, instruct
-  the user to contact the mission medical officer and follow
-  established emergency medical protocols.
-- Keep responses clear, practical and easy to understand.
-- Never pretend to contact rescue teams or dispatch emergency services.
+Response style:
+- Be friendly, intelligent and professional.
+- Respond naturally to greetings.
+- Explain technical concepts in simple language.
+- Use clear structured answers when useful.
+- Never invent sensor readings or mission information.
+- Clearly identify simulated data as simulated.
+
+Medical safety:
+- You are not a doctor.
+- Do not diagnose diseases or prescribe medication.
+- Recommend professional medical review for concerning readings.
+- For emergencies, advise contacting the mission medical officer
+  and following established emergency procedures.
+- Never claim to have contacted emergency services or mission control.
 """
 
 
 def ask_astra(question, conversation_history=None):
-    """Send a question to Gemini using a server-side API key."""
+    question = str(question).strip()
 
-    if not isinstance(question, str) or not question.strip():
-        raise ValueError("Please enter a valid question.")
+    if not question:
+        raise ValueError("Please enter a message.")
 
-    api_key = os.getenv("GEMINI_API_KEY")
+    if len(question) > 4000:
+        raise ValueError("Message is too long.")
+
+    api_key = os.getenv("OPENROUTER_API_KEY")
+
     if not api_key:
         raise RuntimeError(
-            "Gemini is not configured. Add GEMINI_API_KEY in Render environment variables."
+            "OPENROUTER_API_KEY is missing from Render environment settings."
         )
 
-    contents = []
+    messages = [
+        {
+            "role": "system",
+            "content": SYSTEM_PROMPT
+        }
+    ]
 
     if isinstance(conversation_history, list):
-        for item in conversation_history[-12:]:
+        for item in conversation_history[-10:]:
             if not isinstance(item, dict):
                 continue
 
             role = item.get("role")
-            text = item.get("content")
+            content = item.get("content")
 
-            if role not in ("user", "assistant"):
-                continue
-            if not isinstance(text, str) or not text.strip():
-                continue
-
-            contents.append({
-                "role": "model" if role == "assistant" else "user",
-                "parts": [{"text": text[:4000]}]
-            })
+            if role in ("user", "assistant") and isinstance(content, str):
+                if content.strip():
+                    messages.append({
+                        "role": role,
+                        "content": content[:4000]
+                    })
 
     if not (
-        contents
-        and contents[-1]["role"] == "user"
-        and contents[-1]["parts"][0]["text"].strip() == question.strip()
+        len(messages) > 1
+        and messages[-1]["role"] == "user"
+        and messages[-1]["content"].strip() == question
     ):
-        contents.append({
+        messages.append({
             "role": "user",
-            "parts": [{"text": question.strip()}]
+            "content": question
         })
 
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://astra-health-360.onrender.com",
+        "X-Title": "ASTRA HEALTH 360"
+    }
+
     payload = {
-        "system_instruction": {
-            "parts": [{"text": SYSTEM_PROMPT}]
-        },
-        "contents": contents,
-        "generationConfig": {
-            "temperature": 0.5,
-            "maxOutputTokens": 700
-        }
+        "model": OPENROUTER_MODEL,
+        "messages": messages,
+        "temperature": 0.5,
+        "max_tokens": 700
     }
 
     try:
         response = requests.post(
-            GEMINI_API_URL,
-            headers={
-                "x-goog-api-key": api_key,
-                "Content-Type": "application/json"
-            },
+            OPENROUTER_URL,
+            headers=headers,
             json=payload,
-            timeout=60
+            timeout=90
         )
 
         if not response.ok:
-            try:
-                detail = response.json().get("error", {}).get("message", "")
-            except ValueError:
-                detail = response.text[:500]
+            logger.error(
+                "OpenRouter error %s: %s",
+                response.status_code,
+                response.text[:1000]
+            )
+
             raise RuntimeError(
-                f"Gemini API error ({response.status_code}): {detail or 'Request failed.'}"
+                f"OpenRouter returned HTTP {response.status_code}. "
+                "Check your API key, model availability and account limits."
             )
 
         result = response.json()
-        candidates = result.get("candidates", [])
-        if not candidates:
-            raise RuntimeError("Gemini returned no response. Try rephrasing your question.")
 
-        parts = candidates[0].get("content", {}).get("parts", [])
-        answer = "\n".join(
-            part.get("text", "") for part in parts if part.get("text")
-        ).strip()
+        answer = (
+            result.get("choices", [{}])[0]
+            .get("message", {})
+            .get("content", "")
+        )
+
+        if isinstance(answer, list):
+            answer = "\n".join(
+                item.get("text", "")
+                for item in answer
+                if isinstance(item, dict)
+            )
+
+        answer = str(answer).strip()
 
         if not answer:
-            raise RuntimeError("Gemini returned an empty response.")
+            raise RuntimeError("ASTRA received an empty AI response.")
 
         return answer
 
     except requests.exceptions.Timeout as error:
-        raise RuntimeError("Gemini took too long to respond. Please try again.") from error
+        logger.exception("OpenRouter request timed out")
+        raise RuntimeError(
+            "ASTRA took too long to respond. Please try again."
+        ) from error
+
     except requests.exceptions.RequestException as error:
-        raise RuntimeError(f"Could not connect to Gemini: {error}") from error
+        logger.exception("OpenRouter connection failed")
+        raise RuntimeError(
+            "Could not connect to OpenRouter."
+        ) from error

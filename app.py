@@ -302,7 +302,7 @@ def api_status():
         return jsonify({
             "status": "online",
             "application": "ASTRA HEALTH 360",
-            "ai": "Local Ollama",
+            "ai": "OpenRouter Hosted AI",
             "database": "SQLite"
         })
 
@@ -594,86 +594,42 @@ def manage_alert(alert_id):
 
 
 # ==================================================
-# ASTRA AI - LOCAL OLLAMA
+# ASTRA AI - HOSTED OPENROUTER API
 # ==================================================
 
 @app.route("/api/assistant", methods=["POST"])
 def api_assistant():
     data = request.get_json(silent=True) or {}
+
     question = str(data.get("question", "")).strip()
 
     if not question:
-        return jsonify({"error": "Please enter a question"}), 400
+        return jsonify({
+            "success": False,
+            "error": "Please enter a message."
+        }), 400
 
     if len(question) > 4000:
-        return jsonify({"error": "Message is too long"}), 400
+        return jsonify({
+            "success": False,
+            "error": "Message is too long."
+        }), 400
 
     try:
         answer = ask_astra(question)
-        return jsonify({"answer": answer})
 
-    except Exception:
+        return jsonify({
+            "success": True,
+            "answer": answer
+        }), 200
+
+    except Exception as error:
         app.logger.exception("ASTRA AI error")
 
         return jsonify({
-            "error": "ASTRA AI is unavailable. Check that Ollama is running and the model is installed."
+            "success": False,
+            "error": str(error)
         }), 503
-
-
-# ==================================================
-# WELLNESS CHECK-INS
-# ==================================================
-
-@app.route("/api/wellness", methods=["GET", "POST"])
-def api_wellness():
-    connection = get_db_connection()
-
-    if request.method == "POST":
-        data = request.get_json(silent=True) or {}
-
-        mood = str(data.get("mood", "")).strip()
-        crew_id = data.get("crew_id")
-
-        if mood not in ["Positive", "Neutral", "Low"]:
-            connection.close()
-            return jsonify({"error": "Invalid mood"}), 400
-
-        if crew_id is not None:
-            try:
-                crew_id = int(crew_id)
-
-            except (ValueError, TypeError):
-                connection.close()
-                return jsonify({"error": "Invalid crew ID"}), 400
-
-            if not crew_exists(connection, crew_id):
-                connection.close()
-                return jsonify({"error": "Crew member not found"}), 404
-
-        connection.execute("""
-            INSERT INTO wellness_checkins (crew_id, mood)
-            VALUES (?, ?)
-        """, (crew_id, mood))
-
-        connection.commit()
-        connection.close()
-
-        return jsonify({
-            "message": "Wellness check-in saved"
-        }), 201
-
-    records = connection.execute("""
-        SELECT wellness_checkins.*, crew.name AS crew_name
-        FROM wellness_checkins
-        LEFT JOIN crew ON crew.id = wellness_checkins.crew_id
-        ORDER BY wellness_checkins.recorded_at DESC
-        LIMIT 100
-    """).fetchall()
-
-    connection.close()
-
-    return jsonify([dict(row) for row in records])
-
 
 # ==================================================
 # FITNESS SESSIONS
