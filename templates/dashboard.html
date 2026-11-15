@@ -11,498 +11,505 @@
 
 <style>
 :root {
-    --oc-bg: #050b18;
-    --oc-panel: rgba(12, 25, 47, .88);
-    --oc-line: rgba(76, 174, 255, .2);
-    --oc-cyan: #39e8f4;
-    --oc-blue: #65aaff;
-    --oc-green: #35e6a2;
-    --oc-yellow: #ffc65c;
-    --oc-red: #ff5876;
-    --oc-text: #eaf4ff;
-    --oc-muted: #8da6c5;
+    --oc-bg:#050b18;
+    --oc-panel:rgba(12,25,47,.88);
+    --oc-line:rgba(76,174,255,.2);
+    --oc-cyan:#39e8f4;
+    --oc-blue:#65aaff;
+    --oc-green:#35e6a2;
+    --oc-yellow:#ffc65c;
+    --oc-red:#ff5876;
+    --oc-text:#eaf4ff;
+    --oc-muted:#8da6c5;
 }
 
 .orbital-dashboard {
-    color: var(--oc-text);
-    font-family: Inter, sans-serif;
+    color:var(--oc-text);
+    font-family:Inter,sans-serif;
 }
 
 .oc-hero {
-    position: relative;
-    overflow: hidden;
-    padding: 25px;
-    border: 1px solid var(--oc-line);
-    border-radius: 20px;
+    position:relative;
+    overflow:hidden;
+    padding:25px;
+    border:1px solid var(--oc-line);
+    border-radius:20px;
     background:
-      radial-gradient(circle at 85% 10%, rgba(29, 130, 255, .23), transparent 38%),
-      linear-gradient(120deg, #101e37, #071225 65%, #0c2940);
-    margin-bottom: 20px;
+      radial-gradient(circle at 85% 10%,rgba(29,130,255,.23),transparent 38%),
+      linear-gradient(120deg,#101e37,#071225 65%,#0c2940);
+    margin-bottom:20px;
 }
 
 .oc-hero::after {
-    content: "";
-    position: absolute;
-    width: 280px;
-    height: 280px;
-    right: -80px;
-    top: -150px;
-    border: 1px solid rgba(57, 232, 244, .2);
-    border-radius: 50%;
-    box-shadow: 0 0 0 25px rgba(57,232,244,.025),
-                0 0 0 55px rgba(57,232,244,.02);
-    pointer-events: none;
+    content:"";
+    position:absolute;
+    width:280px;
+    height:280px;
+    right:-80px;
+    top:-150px;
+    border:1px solid rgba(57,232,244,.2);
+    border-radius:50%;
+    box-shadow:0 0 0 25px rgba(57,232,244,.025),
+               0 0 0 55px rgba(57,232,244,.02);
+    pointer-events:none;
 }
 
 .oc-kicker {
-    color: var(--oc-cyan);
-    font: 700 11px Orbitron, sans-serif;
-    letter-spacing: 2px;
+    color:var(--oc-cyan);
+    font:700 11px Orbitron,sans-serif;
+    letter-spacing:2px;
 }
 
 .oc-hero h1 {
-    font: 800 clamp(23px, 4vw, 38px) Orbitron, sans-serif;
-    margin: 12px 0 8px;
-    letter-spacing: 1px;
+    font:800 clamp(23px,4vw,38px) Orbitron,sans-serif;
+    margin:12px 0 8px;
+    letter-spacing:1px;
 }
 
 .oc-hero p {
-    color: var(--oc-muted);
-    max-width: 650px;
-    line-height: 1.6;
+    color:var(--oc-muted);
+    max-width:650px;
+    line-height:1.6;
 }
 
 .oc-hero-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:1;
 }
 
 .oc-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--oc-green);
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:var(--oc-green);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1px;
 }
 
 .oc-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    box-shadow: 0 0 12px currentColor;
-    animation: ocPulse 1.8s infinite;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 12px currentColor;
+    animation:ocPulse 1.8s infinite;
 }
 
 @keyframes ocPulse {
-    50% { opacity: .35; }
+    50% {opacity:.35;}
 }
 
 .oc-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
 .oc-btn {
-    border: 1px solid rgba(57,232,244,.35);
-    background: rgba(57,232,244,.1);
-    color: var(--oc-cyan);
-    border-radius: 9px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 12px;
-    text-decoration: none;
+    border:1px solid rgba(57,232,244,.35);
+    background:rgba(57,232,244,.1);
+    color:var(--oc-cyan);
+    border-radius:9px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:12px;
+    text-decoration:none;
 }
 
 .oc-btn:hover {
-    background: rgba(57,232,244,.2);
+    background:rgba(57,232,244,.2);
 }
 
 .oc-btn-danger {
-    color: #ff7890;
-    border-color: rgba(255,88,118,.4);
-    background: rgba(255,88,118,.1);
+    color:#ff7890;
+    border-color:rgba(255,88,118,.4);
+    background:rgba(255,88,118,.1);
 }
 
 .oc-section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin: 24px 0 13px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin:24px 0 13px;
 }
 
 .oc-section-title h2 {
-    font: 700 13px Orbitron, sans-serif;
-    letter-spacing: 1.2px;
-    color: var(--oc-text);
-    margin: 0;
+    font:700 13px Orbitron,sans-serif;
+    letter-spacing:1.2px;
+    color:var(--oc-text);
+    margin:0;
 }
 
 .oc-section-title span {
-    color: var(--oc-muted);
-    font-size: 11px;
+    color:var(--oc-muted);
+    font-size:11px;
 }
 
 .oc-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 13px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:13px;
 }
 
 .oc-card {
-    min-width: 0;
-    padding: 17px;
-    border: 1px solid var(--oc-line);
-    border-radius: 15px;
-    background: var(--oc-panel);
-    box-shadow: 0 12px 35px rgba(0,0,0,.15);
+    min-width:0;
+    padding:17px;
+    border:1px solid var(--oc-line);
+    border-radius:15px;
+    background:var(--oc-panel);
+    box-shadow:0 12px 35px rgba(0,0,0,.15);
 }
 
 .oc-card-label {
-    color: var(--oc-muted);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    color:var(--oc-muted);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
 }
 
 .oc-card-value {
-    color: var(--oc-cyan);
-    font: 800 27px Orbitron, sans-serif;
-    margin: 13px 0 6px;
-    overflow-wrap: anywhere;
+    color:var(--oc-cyan);
+    font:800 27px Orbitron,sans-serif;
+    margin:13px 0 6px;
+    overflow-wrap:anywhere;
 }
 
 .oc-card-foot {
-    color: var(--oc-muted);
-    font-size: 10px;
+    color:var(--oc-muted);
+    font-size:10px;
 }
 
 .oc-layout-main {
-    display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr);
-    gap: 15px;
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(280px,.85fr);
+    gap:15px;
 }
 
 .oc-panel {
-    min-width: 0;
-    overflow: hidden;
-    border: 1px solid var(--oc-line);
-    border-radius: 16px;
-    background: var(--oc-panel);
+    min-width:0;
+    overflow:hidden;
+    border:1px solid var(--oc-line);
+    border-radius:16px;
+    background:var(--oc-panel);
 }
 
 .oc-panel-head {
-    padding: 15px 17px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border-bottom: 1px solid var(--oc-line);
+    padding:15px 17px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:1px solid var(--oc-line);
 }
 
 .oc-panel-head h3 {
-    font: 700 11px Orbitron, sans-serif;
-    letter-spacing: 1px;
-    margin: 0;
-    color: var(--oc-text);
+    font:700 11px Orbitron,sans-serif;
+    letter-spacing:1px;
+    margin:0;
+    color:var(--oc-text);
 }
 
 .oc-panel-body {
-    padding: 16px;
+    padding:16px;
 }
 
 .oc-globe-wrap {
-    position: relative;
-    min-height: 340px;
+    position:relative;
+    height:340px;
+    min-height:340px;
     background:
-      radial-gradient(ellipse at center, rgba(20,104,190,.2), transparent 65%),
+      radial-gradient(ellipse at center,rgba(20,104,190,.2),transparent 65%),
       #050d1b;
 }
 
 #astra-earth {
-    width: 100%;
-    height: 340px;
-    display: block;
+    width:100%;
+    height:100%;
+    min-height:270px;
+    display:block;
+    position:relative;
+}
+
+#astra-earth canvas {
+    display:block;
+    width:100%;
+    height:100%;
 }
 
 .oc-globe-caption {
-    position: absolute;
-    left: 16px;
-    bottom: 13px;
-    color: var(--oc-muted);
-    font-size: 10px;
-    pointer-events: none;
+    position:absolute;
+    left:16px;
+    bottom:13px;
+    color:var(--oc-muted);
+    font-size:10px;
+    pointer-events:none;
+    z-index:2;
 }
 
 .oc-globe-tag {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    color: var(--oc-cyan);
-    font: 700 10px Orbitron, sans-serif;
-    letter-spacing: 1px;
+    position:absolute;
+    top:15px;
+    right:15px;
+    color:var(--oc-cyan);
+    font:700 10px Orbitron,sans-serif;
+    letter-spacing:1px;
+    pointer-events:none;
+    z-index:2;
 }
 
 .oc-side-stack {
-    display: grid;
-    gap: 15px;
-    align-content: start;
+    display:grid;
+    gap:15px;
+    align-content:start;
 }
 
 .oc-mini-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 0;
-    border-bottom: 1px solid rgba(76,174,255,.12);
-    font-size: 12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:11px 0;
+    border-bottom:1px solid rgba(76,174,255,.12);
+    font-size:12px;
 }
 
 .oc-mini-row:last-child {
-    border-bottom: 0;
+    border-bottom:0;
 }
 
 .oc-mini-row span:first-child {
-    color: var(--oc-muted);
+    color:var(--oc-muted);
 }
 
 .oc-mini-row strong {
-    color: var(--oc-text);
-    text-align: right;
+    color:var(--oc-text);
+    text-align:right;
 }
 
 .oc-tag {
-    display: inline-block;
-    padding: 5px 8px;
-    border-radius: 20px;
-    background: rgba(53,230,162,.1);
-    color: var(--oc-green);
-    font-size: 9px;
-    font-weight: 800;
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:20px;
+    background:rgba(53,230,162,.1);
+    color:var(--oc-green);
+    font-size:9px;
+    font-weight:800;
 }
 
 .oc-tag.warning {
-    background: rgba(255,198,92,.1);
-    color: var(--oc-yellow);
+    background:rgba(255,198,92,.1);
+    color:var(--oc-yellow);
 }
 
 .oc-tag.danger {
-    background: rgba(255,88,118,.1);
-    color: var(--oc-red);
+    background:rgba(255,88,118,.1);
+    color:var(--oc-red);
 }
 
 .oc-chart-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: 15px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px;
 }
 
 .oc-chart-wrap {
-    min-height: 230px;
+    min-height:230px;
 }
 
 .oc-chart-wrap canvas {
-    width: 100%;
-    max-width: 100%;
+    width:100%;
+    max-width:100%;
 }
 
 .oc-data-note {
-    margin-top: 12px;
-    color: var(--oc-muted);
-    font-size: 10px;
-    line-height: 1.5;
+    margin-top:12px;
+    color:var(--oc-muted);
+    font-size:10px;
+    line-height:1.5;
 }
 
 .oc-list {
-    display: grid;
-    gap: 9px;
+    display:grid;
+    gap:9px;
 }
 
 .oc-list-item {
-    padding: 12px;
-    border: 1px solid rgba(76,174,255,.12);
-    border-radius: 10px;
-    background: rgba(7,17,34,.65);
+    padding:12px;
+    border:1px solid rgba(76,174,255,.12);
+    border-radius:10px;
+    background:rgba(7,17,34,.65);
 }
 
 .oc-list-item strong {
-    display: block;
-    font-size: 12px;
-    margin-bottom: 5px;
+    display:block;
+    font-size:12px;
+    margin-bottom:5px;
 }
 
 .oc-list-item small {
-    color: var(--oc-muted);
-    font-size: 10px;
+    color:var(--oc-muted);
+    font-size:10px;
 }
 
 .oc-ai-card {
     background:
-      radial-gradient(circle at 100% 0, rgba(57,232,244,.12), transparent 45%),
+      radial-gradient(circle at 100% 0,rgba(57,232,244,.12),transparent 45%),
       var(--oc-panel);
 }
 
 .oc-ai-icon {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px;
-    color: var(--oc-cyan);
-    background: rgba(57,232,244,.12);
-    font-size: 22px;
-    margin-bottom: 13px;
+    width:43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    color:var(--oc-cyan);
+    background:rgba(57,232,244,.12);
+    font-size:22px;
+    margin-bottom:13px;
 }
 
 .oc-quick-links {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 10px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
 }
 
 .oc-quick-link {
-    display: block;
-    padding: 15px 10px;
-    text-align: center;
-    text-decoration: none;
-    color: var(--oc-text);
-    border: 1px solid var(--oc-line);
-    border-radius: 12px;
-    background: rgba(12,25,47,.8);
-    font-size: 11px;
-    transition: .2s;
+    display:block;
+    padding:15px 10px;
+    text-align:center;
+    text-decoration:none;
+    color:var(--oc-text);
+    border:1px solid var(--oc-line);
+    border-radius:12px;
+    background:rgba(12,25,47,.8);
+    font-size:11px;
+    transition:.2s;
 }
 
 .oc-quick-link:hover {
-    border-color: var(--oc-cyan);
-    transform: translateY(-3px);
+    border-color:var(--oc-cyan);
+    transform:translateY(-3px);
 }
 
 .oc-quick-link b {
-    display: block;
-    font-size: 20px;
-    margin-bottom: 8px;
-    color: var(--oc-cyan);
+    display:block;
+    font-size:20px;
+    margin-bottom:8px;
+    color:var(--oc-cyan);
 }
 
 .oc-empty {
-    color: var(--oc-muted);
-    font-size: 11px;
-    padding: 12px 0;
+    color:var(--oc-muted);
+    font-size:11px;
+    padding:12px 0;
 }
 
 .oc-footer-note {
-    padding: 14px;
-    border: 1px solid rgba(255,198,92,.2);
-    border-radius: 12px;
-    background: rgba(255,198,92,.05);
-    color: var(--oc-muted);
-    font-size: 10px;
-    line-height: 1.6;
-    margin-top: 18px;
+    padding:14px;
+    border:1px solid rgba(255,198,92,.2);
+    border-radius:12px;
+    background:rgba(255,198,92,.05);
+    color:var(--oc-muted);
+    font-size:10px;
+    line-height:1.6;
+    margin-top:18px;
 }
 
-/* CSV DATASET DASHBOARD */
-
 .oc-dataset-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 13px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:13px;
 }
 
 .oc-dataset-card {
-    padding: 16px;
-    border: 1px solid var(--oc-line);
-    border-radius: 13px;
-    background: var(--oc-panel);
+    padding:16px;
+    border:1px solid var(--oc-line);
+    border-radius:13px;
+    background:var(--oc-panel);
 }
 
 .oc-dataset-card h4 {
-    color: var(--oc-muted);
-    font-size: 11px;
-    margin: 0 0 12px;
+    color:var(--oc-muted);
+    font-size:11px;
+    margin:0 0 12px;
 }
 
 .oc-dataset-count {
-    color: var(--oc-cyan);
-    font: 800 25px Orbitron, sans-serif;
+    color:var(--oc-cyan);
+    font:800 25px Orbitron,sans-serif;
 }
 
 .oc-dataset-table-wrap {
-    overflow-x: auto;
-    width: 100%;
+    overflow-x:auto;
+    width:100%;
 }
 
 .oc-dataset-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 650px;
-    font-size: 11px;
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+    font-size:11px;
 }
 
 .oc-dataset-table th,
 .oc-dataset-table td {
-    padding: 11px;
-    border-bottom: 1px solid var(--oc-line);
-    text-align: left;
-    color: var(--oc-text);
+    padding:11px;
+    border-bottom:1px solid var(--oc-line);
+    text-align:left;
+    color:var(--oc-text);
 }
 
 .oc-dataset-table th {
-    color: var(--oc-cyan);
-    background: rgba(57,232,244,.07);
+    color:var(--oc-cyan);
+    background:rgba(57,232,244,.07);
 }
 
 .oc-dataset-controls {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 15px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:15px;
 }
 
 .oc-dataset-select {
-    padding: 10px;
-    border-radius: 8px;
-    background: #101e37;
-    color: white;
-    border: 1px solid var(--oc-line);
+    padding:10px;
+    border-radius:8px;
+    background:#101e37;
+    color:white;
+    border:1px solid var(--oc-line);
 }
 
-@media(max-width: 1050px) {
-    .oc-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .oc-layout-main { grid-template-columns: 1fr; }
+@media(max-width:1050px) {
+    .oc-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+    .oc-layout-main {grid-template-columns:1fr;}
 }
 
-@media(max-width: 650px) {
-    .oc-chart-grid { grid-template-columns: 1fr; }
-    .oc-quick-links { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .oc-dataset-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .oc-hero { padding: 18px; }
-    .oc-card-value { font-size: 22px; }
-    #astra-earth { height: 270px; }
-    .oc-globe-wrap { min-height: 270px; }
+@media(max-width:650px) {
+    .oc-chart-grid {grid-template-columns:1fr;}
+    .oc-quick-links {grid-template-columns:repeat(2,minmax(0,1fr));}
+    .oc-dataset-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+    .oc-hero {padding:18px;}
+    .oc-card-value {font-size:22px;}
+    .oc-globe-wrap {height:270px;min-height:270px;}
 }
 </style>
 {% endblock %}
 
-
 {% block content %}
 <div class="orbital-dashboard">
 
-    <!-- MISSION HERO -->
     <section class="oc-hero">
         <div class="oc-hero-row">
             <div>
@@ -530,7 +537,6 @@
         </div>
     </section>
 
-    <!-- MISSION METRICS -->
     <div class="oc-section-title">
         <h2>MISSION-WIDE HEALTH OVERVIEW</h2>
         <span>Backend-connected metrics</span>
@@ -542,19 +548,16 @@
             <div class="oc-card-value" id="total-crew">--</div>
             <div class="oc-card-foot">Registered mission crew</div>
         </article>
-
         <article class="oc-card">
             <div class="oc-card-label">Active Alerts</div>
             <div class="oc-card-value" id="total-alerts">--</div>
             <div class="oc-card-foot">Alerts recorded in system</div>
         </article>
-
         <article class="oc-card">
             <div class="oc-card-label">Average Heart Rate</div>
             <div class="oc-card-value" id="average-heart-rate">--</div>
             <div class="oc-card-foot">BPM · Latest available records</div>
         </article>
-
         <article class="oc-card">
             <div class="oc-card-label">Average Blood Oxygen</div>
             <div class="oc-card-value" id="average-oxygen">--</div>
@@ -562,20 +565,17 @@
         </article>
     </section>
 
-    <!-- EARTH + MISSION STATUS -->
     <div class="oc-section-title">
         <h2>PLANETARY VIEW & MISSION STATUS</h2>
         <span>Interactive 3D visualization</span>
     </div>
 
     <section class="oc-layout-main">
-
         <article class="oc-panel">
             <div class="oc-panel-head">
                 <h3>EARTH / ORBITAL VISUALIZATION</h3>
                 <span class="oc-tag">3D VIEW</span>
             </div>
-
             <div class="oc-globe-wrap">
                 <div id="astra-earth" aria-label="Interactive 3D Earth visualization"></div>
                 <div class="oc-globe-tag">EARTH / ORBITAL VIEW</div>
@@ -586,7 +586,6 @@
         </article>
 
         <div class="oc-side-stack">
-
             <article class="oc-panel">
                 <div class="oc-panel-head">
                     <h3>MISSION SYSTEM STATUS</h3>
@@ -631,11 +630,9 @@
                     </a>
                 </div>
             </article>
-
         </div>
     </section>
 
-    <!-- HEALTH TELEMETRY -->
     <div class="oc-section-title">
         <h2>CREW BIOMETRIC TELEMETRY</h2>
         <span>Historical records from backend</span>
@@ -651,7 +648,6 @@
                 <canvas id="dashboard-heart-chart" height="190"></canvas>
             </div>
         </article>
-
         <article class="oc-panel">
             <div class="oc-panel-head">
                 <h3>BLOOD OXYGEN TREND</h3>
@@ -669,14 +665,12 @@
         supplies authenticated sensor readings.
     </p>
 
-    <!-- CREW AND ALERTS -->
     <div class="oc-section-title">
         <h2>CREW & INCIDENT INTELLIGENCE</h2>
         <span>Latest backend records</span>
     </div>
 
     <section class="oc-chart-grid">
-
         <article class="oc-panel">
             <div class="oc-panel-head">
                 <h3>CREW STATUS</h3>
@@ -737,69 +731,53 @@
                 </p>
             </div>
         </article>
-
     </section>
 
-    <!-- CSV DATASET INTELLIGENCE -->
     <div class="oc-section-title">
         <h2>ASTRONAUT DATASET INTELLIGENCE</h2>
         <span>Connected CSV datasets</span>
     </div>
 
     <section class="oc-dataset-grid">
-
         <article class="oc-dataset-card">
             <h4>CARDIOVASCULAR</h4>
             <div class="oc-dataset-count" id="csv-cardiovascular">--</div>
             <small class="oc-card-foot">Records</small>
         </article>
-
         <article class="oc-dataset-card">
             <h4>IMMUNE ALAMAR</h4>
             <div class="oc-dataset-count" id="csv-immune-alamar">--</div>
             <small class="oc-card-foot">Records</small>
         </article>
-
         <article class="oc-dataset-card">
             <h4>IMMUNE EVE</h4>
             <div class="oc-dataset-count" id="csv-immune-eve">--</div>
             <small class="oc-card-foot">Records</small>
         </article>
-
         <article class="oc-dataset-card">
             <h4>METABOLIC</h4>
             <div class="oc-dataset-count" id="csv-metabolic">--</div>
             <small class="oc-card-foot">Records</small>
         </article>
-
     </section>
 
     <article class="oc-panel" style="margin-top:15px;">
-
         <div class="oc-panel-head">
             <h3>CSV HEALTH DATA EXPLORER</h3>
             <span class="oc-tag" id="csv-status">CONNECTING</span>
         </div>
-
         <div class="oc-panel-body">
-
             <div class="oc-dataset-controls">
-
-                <label for="csv-dataset-select">
-                    Select dataset:
-                </label>
-
+                <label for="csv-dataset-select">Select dataset:</label>
                 <select id="csv-dataset-select" class="oc-dataset-select">
                     <option value="cardiovascular">Cardiovascular</option>
                     <option value="immune_alamar">Immune Alamar</option>
                     <option value="immune_eve">Immune Eve</option>
                     <option value="metabolic">Metabolic</option>
                 </select>
-
                 <button class="oc-btn" id="csv-load-button" type="button">
                     LOAD DATA
                 </button>
-
             </div>
 
             <p id="csv-record-info" class="oc-data-note">
@@ -810,9 +788,7 @@
                 <table class="oc-dataset-table">
                     <thead id="csv-table-head"></thead>
                     <tbody id="csv-table-body">
-                        <tr>
-                            <td>Loading records...</td>
-                        </tr>
+                        <tr><td>Loading records...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -821,43 +797,24 @@
                 Showing up to 50 records from the selected dataset.
                 Only a maximum of 8 columns are displayed for readability.
             </p>
-
             <p id="csv-error" style="color:#ff7890;font-size:12px;"></p>
-
         </div>
     </article>
 
-    <!-- QUICK ACCESS -->
     <div class="oc-section-title">
         <h2>MISSION OPERATIONS / QUICK ACCESS</h2>
         <span>Application modules</span>
     </div>
 
     <section class="oc-quick-links">
-        <a class="oc-quick-link" href="{{ url_for('page', page='health') }}">
-            <b>♡</b>Health Monitoring
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='wellness') }}">
-            <b>✧</b>Crew Wellness
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='fitness') }}">
-            <b>⌁</b>Fitness
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='environment') }}">
-            <b>◉</b>Environment
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='medication') }}">
-            <b>✚</b>Medication
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='inventory') }}">
-            <b>▤</b>Inventory
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='communications') }}">
-            <b>⌁</b>Communications
-        </a>
-        <a class="oc-quick-link" href="{{ url_for('page', page='reports') }}">
-            <b>▧</b>Mission Reports
-        </a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='health') }}"><b>♡</b>Health Monitoring</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='wellness') }}"><b>✧</b>Crew Wellness</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='fitness') }}"><b>⌁</b>Fitness</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='environment') }}"><b>◉</b>Environment</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='medication') }}"><b>✚</b>Medication</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='inventory') }}"><b>▤</b>Inventory</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='communications') }}"><b>⌁</b>Communications</a>
+        <a class="oc-quick-link" href="{{ url_for('page', page='reports') }}"><b>▧</b>Mission Reports</a>
     </section>
 
     <div class="oc-footer-note">
@@ -871,40 +828,30 @@
 </div>
 {% endblock %}
 
-
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 <script src="{{ url_for('static', filename='js/mission-intelligence.js') }}"></script>
 
->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-  }
-}<!-- Three.js 3D Earth visualization --
-</script>
-
+<!-- Three.js Earth: independent ES module -->
 <script type="module">
-import * as THREE from "three";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 
 const container = document.getElementById("astra-earth");
 
 if (container) {
     let renderer;
     let animationId;
-    let earth;
     let resizeObserver;
 
     try {
         const scene = new THREE.Scene();
 
+        const width = container.clientWidth || 600;
+        const height = container.clientHeight || 340;
+
         const camera = new THREE.PerspectiveCamera(
-            42,
-            container.clientWidth / container.clientHeight,
-            0.1,
-            100
+            42, width / height, 0.1, 100
         );
         camera.position.z = 3.2;
 
@@ -913,11 +860,11 @@ if (container) {
             alpha: true
         });
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(width, height);
         container.appendChild(renderer.domElement);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+        scene.add(new THREE.AmbientLight(0xffffff, 1.5));
 
         const sunlight = new THREE.DirectionalLight(0xffffff, 2.5);
         sunlight.position.set(4, 2, 5);
@@ -931,10 +878,11 @@ if (container) {
             metalness: 0.05
         });
 
-        earth = new THREE.Mesh(earthGeometry, earthMaterial);
+        const earth = new THREE.Mesh(earthGeometry, earthMaterial);
         scene.add(earth);
 
         const cloudGeometry = new THREE.SphereGeometry(1.012, 64, 64);
+
         const cloudMaterial = new THREE.MeshBasicMaterial({
             color: 0x73cfff,
             transparent: true,
@@ -945,7 +893,7 @@ if (container) {
         const atmosphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
         scene.add(atmosphere);
 
-        const atmosphereGlow = new THREE.Mesh(
+        const glow = new THREE.Mesh(
             new THREE.SphereGeometry(1.08, 64, 64),
             new THREE.MeshBasicMaterial({
                 color: 0x299cff,
@@ -954,12 +902,15 @@ if (container) {
                 side: THREE.BackSide
             })
         );
-        scene.add(atmosphereGlow);
 
-        // Decorative orbital path.
+        scene.add(glow);
+
+        // Orbital ring
         const orbitPoints = [];
+
         for (let i = 0; i <= 160; i++) {
             const angle = (i / 160) * Math.PI * 2;
+
             orbitPoints.push(new THREE.Vector3(
                 1.43 * Math.cos(angle),
                 0.48 * Math.sin(angle),
@@ -967,7 +918,9 @@ if (container) {
             ));
         }
 
-        const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
+        const orbitGeometry =
+            new THREE.BufferGeometry().setFromPoints(orbitPoints);
+
         const orbitMaterial = new THREE.LineBasicMaterial({
             color: 0x42e8f3,
             transparent: true,
@@ -979,7 +932,7 @@ if (container) {
         orbit.rotation.y = 0.35;
         scene.add(orbit);
 
-        // Decorative satellite marker.
+        // Satellite
         const satellite = new THREE.Group();
 
         const satelliteBody = new THREE.Mesh(
@@ -990,6 +943,7 @@ if (container) {
                 roughness: 0.25
             })
         );
+
         satellite.add(satelliteBody);
 
         const solarMaterial = new THREE.MeshBasicMaterial({
@@ -1000,6 +954,7 @@ if (container) {
             new THREE.BoxGeometry(0.28, 0.09, 0.02),
             solarMaterial
         );
+
         solarLeft.position.x = -0.22;
         satellite.add(solarLeft);
 
@@ -1010,18 +965,23 @@ if (container) {
         scene.add(satellite);
 
         function resizeScene() {
-            const width = container.clientWidth;
-            const height = container.clientHeight;
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
 
-            if (!width || !height) return;
+            if (!newWidth || !newHeight) return;
 
-            camera.aspect = width / height;
+            camera.aspect = newWidth / newHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
+
+            renderer.setSize(newWidth, newHeight);
         }
 
-        resizeObserver = new ResizeObserver(resizeScene);
-        resizeObserver.observe(container);
+        if ("ResizeObserver" in window) {
+            resizeObserver = new ResizeObserver(resizeScene);
+            resizeObserver.observe(container);
+        } else {
+            window.addEventListener("resize", resizeScene);
+        }
 
         const clock = new THREE.Clock();
 
@@ -1030,15 +990,21 @@ if (container) {
 
             const elapsed = clock.getElapsedTime();
 
-            earth.rotation.y += 0.0015;
+            // Continuous Earth rotation
+            earth.rotation.y += 0.003;
+
+            // Atmosphere rotation
             atmosphere.rotation.y -= 0.0007;
 
+            // Orbital movement
             orbit.rotation.y += 0.001;
+
             satellite.position.set(
                 1.43 * Math.cos(elapsed * 0.35),
                 0.48 * Math.sin(elapsed * 0.35),
                 0.1 * Math.sin(elapsed * 0.7)
             );
+
             satellite.lookAt(0, 0, 0);
 
             renderer.render(scene, camera);
@@ -1046,12 +1012,13 @@ if (container) {
 
         animate();
 
-        // Pause rendering when the dashboard is hidden.
         document.addEventListener("visibilitychange", () => {
-            if (document.hidden && animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            } else if (!document.hidden && !animationId) {
+            if (document.hidden) {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            } else if (!animationId) {
                 animate();
             }
         });
@@ -1062,16 +1029,23 @@ if (container) {
             renderer.dispose();
             earthGeometry.dispose();
             earthMaterial.dispose();
+            cloudGeometry.dispose();
+            cloudMaterial.dispose();
+            orbitGeometry.dispose();
         });
+
+        console.log("ASTRA 3D Earth initialized successfully.");
 
     } catch (error) {
         console.error("3D Earth initialization failed:", error);
+
         container.innerHTML =
             '<div style="padding:40px;text-align:center;color:#8da6c5">' +
-            '3D visualization is unavailable in this browser. ' +
-            'Your health monitoring dashboard can still operate.' +
+            '3D visualization is unavailable. Check the browser console.' +
             '</div>';
     }
+} else {
+    console.error("ASTRA Earth container #astra-earth not found.");
 }
 </script>
 
@@ -1084,7 +1058,7 @@ if (container) {
 
     try {
         const response = await fetch("/api/status", {
-            headers: { "Accept": "application/json" }
+            headers: {"Accept":"application/json"}
         });
 
         if (!response.ok) throw new Error("Backend unavailable");
@@ -1096,7 +1070,6 @@ if (container) {
             tag.textContent = "ONLINE";
             tag.className = "oc-tag";
         }
-
     } catch (error) {
         if (backend) backend.textContent = "OFFLINE";
         if (overall) overall.textContent = "BACKEND CONNECTION LOST";
@@ -1108,12 +1081,9 @@ if (container) {
     }
 })();
 
-/* Dashboard refresh timestamp */
 function updateMissionTimestamp() {
     const el = document.getElementById("dashboard-updated");
-    if (el) {
-        el.textContent = new Date().toLocaleTimeString();
-    }
+    if (el) el.textContent = new Date().toLocaleTimeString();
 }
 
 updateMissionTimestamp();
@@ -1122,7 +1092,6 @@ setInterval(updateMissionTimestamp, 15000);
 
 <script>
 /* ASTRA HEALTH 360 - CSV DATASET CONNECTION */
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const datasetSelect = document.getElementById("csv-dataset-select");
@@ -1137,10 +1106,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!datasetSelect || !loadButton) return;
 
     const datasetCards = {
-        cardiovascular: "csv-cardiovascular",
-        immune_alamar: "csv-immune-alamar",
-        immune_eve: "csv-immune-eve",
-        metabolic: "csv-metabolic"
+        cardiovascular:"csv-cardiovascular",
+        immune_alamar:"csv-immune-alamar",
+        immune_eve:"csv-immune-eve",
+        metabolic:"csv-metabolic"
     };
 
     function createCell(tag, value) {
@@ -1152,9 +1121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function loadDatasetSummary() {
-
         try {
-
             const response = await fetch("/api/datasets");
 
             if (!response.ok) {
@@ -1168,31 +1135,23 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             Object.entries(result.datasets).forEach(function ([name, data]) {
-
                 const card = document.getElementById(datasetCards[name]);
 
                 if (card) {
                     card.textContent = Number(data.records).toLocaleString();
                 }
-
             });
 
             status.textContent = "DATASETS ONLINE";
             status.className = "oc-tag";
-
         } catch (error) {
-
             status.textContent = "CONNECTION ERROR";
             status.className = "oc-tag danger";
-
             errorBox.textContent = error.message;
-
         }
-
     }
 
     async function loadSelectedDataset() {
-
         const datasetName = datasetSelect.value;
 
         loadButton.disabled = true;
@@ -1203,7 +1162,6 @@ document.addEventListener("DOMContentLoaded", function () {
         errorBox.textContent = "";
 
         try {
-
             const response = await fetch(
                 "/api/datasets/" + encodeURIComponent(datasetName)
             );
@@ -1221,15 +1179,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const records = result.records || [];
 
             if (records.length === 0) {
-
                 recordInfo.textContent = "No records found.";
                 return;
-
             }
 
-            // Display at most 8 columns to keep the table readable.
             const columns = Object.keys(records[0]).slice(0, 8);
-
             const headerRow = document.createElement("tr");
 
             columns.forEach(function (column) {
@@ -1239,7 +1193,6 @@ document.addEventListener("DOMContentLoaded", function () {
             tableHead.appendChild(headerRow);
 
             records.forEach(function (record) {
-
                 const row = document.createElement("tr");
 
                 columns.forEach(function (column) {
@@ -1247,7 +1200,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 tableBody.appendChild(row);
-
             });
 
             recordInfo.textContent =
@@ -1255,31 +1207,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 " | Records displayed: " + records.length;
 
         } catch (error) {
-
             errorBox.textContent = error.message;
-
             recordInfo.textContent = "Dataset could not be loaded.";
-
         } finally {
-
             loadButton.disabled = false;
             loadButton.textContent = "LOAD DATA";
-
         }
-
     }
 
     loadButton.addEventListener("click", loadSelectedDataset);
-
     datasetSelect.addEventListener("change", loadSelectedDataset);
 
     loadDatasetSummary();
-
     loadSelectedDataset();
-
 });
 </script>
 
 {% endblock %}
-
-
