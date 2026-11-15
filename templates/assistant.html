@@ -14,174 +14,245 @@
     border: 1px solid rgba(66,190,255,.3);
     box-shadow: 0 18px 50px rgba(0,0,0,.22);
 }
-.assistant-welcome h2 {
-    color: #eaf7ff;
-    margin-top: 0;
-}
-.assistant-welcome p {
-    color: #a9bfd3;
-}
+.assistant-welcome h2 { color:#eaf7ff; margin-top:0; }
+.assistant-welcome p { color:#a9bfd3; }
+
 .assistant-layout {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) 270px;
-    gap: 18px;
-    align-items: start;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 270px;
+    gap:18px;
+    align-items:start;
 }
+
 .assistant-chat-panel,
 .assistant-info-panel {
-    border-radius: 15px;
-    background: rgba(18,35,57,.85);
-    border: 1px solid rgba(125,180,220,.17);
-    overflow: hidden;
+    border-radius:15px;
+    background:rgba(18,35,57,.85);
+    border:1px solid rgba(125,180,220,.17);
+    overflow:hidden;
 }
+
 .assistant-chat-header {
-    padding: 17px 20px;
-    background: rgba(30,70,105,.35);
-    border-bottom: 1px solid rgba(125,180,220,.15);
+    padding:17px 20px;
+    background:rgba(30,70,105,.35);
+    border-bottom:1px solid rgba(125,180,220,.15);
 }
-.assistant-chat-header h3 {
-    margin: 0;
-    color: #eaf7ff;
-}
+.assistant-chat-header h3 { margin:0; color:#eaf7ff; }
+
 .assistant-connection {
-    margin-top: 6px;
-    color: #22d6a0;
-    font-size: 12px;
+    margin-top:6px;
+    color:#22d6a0;
+    font-size:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
+.assistant-connection::before {
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#35e6a2;
+    box-shadow:0 0 10px #35e6a2;
+}
+
+/* ASTRA 3D AVATAR */
+#astra-3d-stage {
+    position:relative;
+    width:100%;
+    height:380px;
+    margin-bottom:20px;
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid rgba(57,232,244,.3);
+    background:
+        radial-gradient(circle at 50% 45%,#153b60 0%,#091629 65%,#050c18 100%);
+    box-shadow:0 15px 45px rgba(0,0,0,.3);
+}
+
+#astra-3d-canvas {
+    display:block;
+    width:100%;
+    height:100%;
+}
+
+.astra-3d-label {
+    position:absolute;
+    left:18px;
+    top:16px;
+    z-index:2;
+    color:#72efff;
+    font-size:12px;
+    letter-spacing:2px;
+    pointer-events:none;
+}
+
+.astra-3d-caption {
+    position:absolute;
+    bottom:15px;
+    left:0;
+    right:0;
+    text-align:center;
+    color:#a9eefa;
+    font-size:12px;
+    letter-spacing:1px;
+    pointer-events:none;
+}
+
+#astra-3d-status {
+    position:absolute;
+    top:17px;
+    right:17px;
+    color:#8fffd2;
+    font-size:11px;
+}
+
 #chat-messages {
-    height: 500px;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    height:500px;
+    overflow-y:auto;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
+
 .assistant-message {
-    max-width: 85%;
-    padding: 13px 16px;
-    border-radius: 12px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
+    max-width:85%;
+    padding:13px 16px;
+    border-radius:12px;
+    line-height:1.6;
+    overflow-wrap:anywhere;
+    white-space:pre-wrap;
 }
 .assistant-message.assistant {
-    align-self: flex-start;
-    box-shadow: 0 8px 24px rgba(0,0,0,.12);
-    background: #183550;
-    color: #e5f3ff;
-    border: 1px solid rgba(80,190,255,.17);
+    align-self:flex-start;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+    background:#183550;
+    color:#e5f3ff;
+    border:1px solid rgba(80,190,255,.17);
 }
 .assistant-message.user {
-    align-self: flex-end;
-    box-shadow: 0 8px 24px rgba(0,0,0,.12);
-    background: #12618c;
-    color: white;
+    align-self:flex-end;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+    background:#12618c;
+    color:white;
 }
 .assistant-message-label {
-    display: block;
-    font-size: 11px;
-    opacity: .7;
-    margin-bottom: 5px;
+    display:block;
+    font-size:11px;
+    opacity:.7;
+    margin-bottom:5px;
 }
+
 .assistant-input-area {
-    padding: 17px;
-    border-top: 1px solid rgba(125,180,220,.15);
+    padding:17px;
+    border-top:1px solid rgba(125,180,220,.15);
 }
 .assistant-input-row {
-    display: flex;
-    gap: 10px;
+    display:flex;
+    gap:10px;
 }
 #user-message {
-    flex: 1;
-    min-width: 0;
-    resize: vertical;
-    min-height: 48px;
-    max-height: 130px;
-    padding: 13px;
-    border-radius: 9px;
-    border: 1px solid rgba(125,180,220,.3);
-    background: #0b192b;
-    color: #eaf4ff;
-    font: inherit;
+    flex:1;
+    min-width:0;
+    resize:vertical;
+    min-height:48px;
+    max-height:130px;
+    padding:13px;
+    border-radius:9px;
+    border:1px solid rgba(125,180,220,.3);
+    background:#0b192b;
+    color:#eaf4ff;
+    font:inherit;
 }
+
 .assistant-control-button {
-    padding: 11px 15px;
-    border: 0;
-    border-radius: 8px;
-    background: #167db4;
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
+    padding:11px 15px;
+    border:0;
+    border-radius:8px;
+    background:#167db4;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
 }
 .assistant-control-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
+    opacity:.5;
+    cursor:not-allowed;
 }
+.assistant-control-button.secondary { background:#24435f; }
+
 .assistant-voice-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin-top: 12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:12px;
 }
 .assistant-voice-controls label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: #b7c9da;
-    font-size: 13px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:#b7c9da;
+    font-size:13px;
 }
-.assistant-control-button.secondary {
-    background: #24435f;
-}
-.assistant-info-panel {
-    padding: 18px;
-}
+
+.assistant-info-panel { padding:18px; }
 .assistant-info-panel h3 {
-    margin-top: 0;
-    color: #eaf7ff;
+    margin-top:0;
+    color:#eaf7ff;
 }
 .assistant-info-panel p,
 .assistant-info-panel li {
-    color: #a9bfd3;
-    font-size: 13px;
-    line-height: 1.7;
+    color:#a9bfd3;
+    font-size:13px;
+    line-height:1.7;
 }
-.assistant-info-panel ul {
-    padding-left: 18px;
-}
+
 .assistant-note {
-    padding: 12px;
-    border-radius: 9px;
-    background: rgba(244,189,72,.08);
-    border: 1px solid rgba(244,189,72,.2);
-    color: #e8d5a5;
-    font-size: 12px;
-    line-height: 1.6;
+    padding:12px;
+    border-radius:9px;
+    background:rgba(244,189,72,.08);
+    border:1px solid rgba(244,189,72,.2);
+    color:#e8d5a5;
+    font-size:12px;
+    line-height:1.6;
 }
+
+.astra-prompt-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-top:12px;
+}
+.astra-prompt {
+    text-align:left;
+    padding:10px 11px;
+    border:1px solid rgba(57,232,244,.22);
+    border-radius:10px;
+    background:rgba(57,232,244,.06);
+    color:#c9f7ff;
+    font-size:11px;
+    cursor:pointer;
+}
+.astra-prompt:hover {
+    background:rgba(57,232,244,.14);
+    border-color:rgba(57,232,244,.55);
+}
+
+.assistant-thinking {
+    opacity:.75;
+    font-style:italic;
+}
+
 @media(max-width:900px) {
-    .assistant-layout {
-        grid-template-columns: 1fr;
-    }
+    .assistant-layout { grid-template-columns:1fr; }
 }
 @media(max-width:550px) {
-    #chat-messages {
-        height: 380px;
-        padding: 12px;
-    }
-    .assistant-input-row {
-        flex-direction: column;
-    }
-    .assistant-message {
-        max-width: 95%;
-    }
+    #astra-3d-stage { height:280px; }
+    #chat-messages { height:380px; padding:12px; }
+    .assistant-input-row { flex-direction:column; }
+    .assistant-message { max-width:95%; }
+    .astra-prompt-grid { grid-template-columns:1fr; }
 }
-.astra-prompt-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:12px; }
-.astra-prompt { text-align:left; padding:10px 11px; border:1px solid rgba(57,232,244,.22); border-radius:10px; background:rgba(57,232,244,.06); color:#c9f7ff; font-size:11px; cursor:pointer; }
-.astra-prompt:hover { background:rgba(57,232,244,.14); border-color:rgba(57,232,244,.55); }
-.assistant-connection { display:flex; align-items:center; gap:8px; }
-.assistant-connection::before { content:""; width:7px; height:7px; border-radius:50%; background:#35e6a2; box-shadow:0 0 10px #35e6a2; }
-.assistant-thinking { opacity:.75; font-style:italic; }
-@media(max-width:550px) { .astra-prompt-grid { grid-template-columns:1fr; } }
 </style>
 {% endblock %}
 
@@ -198,6 +269,21 @@
         Ask questions about astronaut wellness, mission health monitoring,
         space environments and general mission support.
     </p>
+</section>
+
+<!-- ASTRA 3D AVATAR DISPLAY -->
+<section id="astra-3d-stage">
+    <div class="astra-3d-label">ASTRA AI · 3D INTERFACE</div>
+    <div id="astra-3d-status">3D INITIALIZING...</div>
+
+    <canvas
+        id="astra-3d-canvas"
+        aria-label="Animated 3D ASTRA AI avatar">
+    </canvas>
+
+    <div class="astra-3d-caption">
+        ASTRA MISSION INTELLIGENCE
+    </div>
 </section>
 
 <div class="assistant-layout">
@@ -228,6 +314,7 @@
 
             <form id="assistant-form">
                 <div class="assistant-input-row">
+
                     <textarea
                         id="user-message"
                         name="question"
@@ -242,6 +329,7 @@
                         type="submit">
                         Send
                     </button>
+
                 </div>
             </form>
 
@@ -277,6 +365,7 @@
     </section>
 
     <aside class="assistant-info-panel">
+
         <h3>Mission Assistant</h3>
 
         <p>
@@ -287,12 +376,37 @@
         <h3>Suggested Questions</h3>
 
         <div class="astra-prompt-grid">
-            <button class="astra-prompt" type="button" data-prompt="Explain how microgravity affects the cardiovascular system.">🫀 Microgravity & heart</button>
-            <button class="astra-prompt" type="button" data-prompt="Explain SpO₂ in simple terms and why it is monitored.">🫁 Understand SpO₂</button>
-            <button class="astra-prompt" type="button" data-prompt="Explain how Isolation Forest detects unusual health patterns.">🧠 Explain the ML model</button>
-            <button class="astra-prompt" type="button" data-prompt="What should a mission team review when an anomaly alert appears?">🚨 Review an alert</button>
-            <button class="astra-prompt" type="button" data-prompt="Describe common effects of long-duration spaceflight on bone and muscle health.">🦴 Bone & muscle health</button>
-            <button class="astra-prompt" type="button" data-prompt="Explain how ASTRA HEALTH 360 is structured and what each module does.">🛰 Explore ASTRA</button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="Explain how microgravity affects the cardiovascular system.">
+                🫀 Microgravity & heart
+            </button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="Explain SpO₂ in simple terms and why it is monitored.">
+                🫁 Understand SpO₂
+            </button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="Explain how Isolation Forest detects unusual health patterns.">
+                🧠 Explain the ML model
+            </button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="What should a mission team review when an anomaly alert appears?">
+                🚨 Review an alert
+            </button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="Describe common effects of long-duration spaceflight on bone and muscle health.">
+                🦴 Bone & muscle health
+            </button>
+
+            <button class="astra-prompt" type="button"
+                data-prompt="Explain how ASTRA HEALTH 360 is structured and what each module does.">
+                🛰 Explore ASTRA
+            </button>
+
         </div>
 
         <div class="assistant-note">
@@ -301,6 +415,7 @@
             medical professional or diagnostic system. Follow authorized
             mission medical protocols for health concerns and emergencies.
         </div>
+
     </aside>
 
 </div>
@@ -308,6 +423,15 @@
 {% endblock %}
 
 {% block scripts %}
+
+<!-- Three.js 3D Library -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<!-- Existing Assistant Features -->
 <script src="{{ url_for('static', filename='js/assistant.js') }}"></script>
 <script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+
+<!-- ASTRA 3D Avatar -->
+<script src="{{ url_for('static', filename='js/astra-3d.js') }}"></script>
+
 {% endblock %}

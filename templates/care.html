@@ -1,0 +1,114 @@
+
+{% extends "base.html" %}
+
+{% block title %}ASTRA 24/7 CARE | ASTRA HEALTH 360{% endblock %}
+
+{% block page_heading %}ASTRA 24/7 CARE{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <h1>ASTRA 24/7 CARE</h1>
+        <p>
+            Healthcare support and consultation request management
+            for mission crew members.
+        </p>
+    </div>
+</div>
+
+<div class="dashboard-card">
+    <h2>Welcome to ASTRA CARE</h2>
+    <p>
+        This module is designed to demonstrate a healthcare
+        consultation request workflow.
+    </p>
+    <p>
+        Submit a demo appointment request and track its status
+        as the system develops.
+    </p>
+</div>
+
+<div class="stats-grid">
+
+    <div class="dashboard-card">
+        <h3>24/7 Support Concept</h3>
+        <p>Healthcare support workflow demonstration.</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Consultation Requests</h3>
+        <p>Submit and manage demo appointment requests.</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Request Tracking</h3>
+        <p>View appointment request status.</p>
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+    <h2>Request a Consultation</h2>
+
+    <p>
+        This is currently a demonstration form.
+        It does not contact a doctor or submit a real appointment.
+        Use fictional information only.
+    </p>
+
+    <form id="care-request-form">
+
+        <label for="care-name">Demo Crew Member Name</label>
+        <input
+            type="text"
+            id="care-name"
+            placeholder="Enter demo name"
+            maxlength="100"
+            required
+        >
+
+        <label for="care-type">Consultation Category</label>
+        <select id="care-type" required>
+            <option value="">Select a category</option>
+            <option value="General Consultation">General Consultation</option>
+            <option value="Wellness Support">Wellness Support</option>
+            <option value="Fitness Guidance">Fitness Guidance</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="care-date">Preferred Date</label>
+        <input
+            type="date"
+            id="care-date"
+            required
+        >
+
+        <label for="care-time">Preferred Time</label>
+        <input
+            type="time"
+            id="care-time"
+            required
+        >
+
+        <button type="button" disabled>
+            Demo Request — Coming Soon
+        </button>
+
+    </form>
+</div>
+
+<div class="dashboard-card">
+    <h2>Important Notice</h2>
+    <p>
+        ASTRA 24/7 CARE is currently a software prototype.
+        It does not provide real medical advice, emergency
+        assistance, doctor availability, or appointment booking.
+    </p>
+    <p>
+        For urgent medical concerns, contact a qualified
+        healthcare professional or local emergency services.
+    </p>
+</div>
+
+{% endblock %}

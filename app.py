@@ -104,6 +104,7 @@ def crew_exists(connection, crew_id):
     ).fetchone() is not None
 
 
+
 # ==================================================
 # DATABASE INITIALIZATION AND MIGRATIONS
 # ==================================================
@@ -252,7 +253,6 @@ def initialize_database():
     finally:
         connection.close()
 
-
 # IMPORTANT:
 # This runs when Render/Gunicorn imports this module.
 # Do not move this inside the __main__ block.
@@ -285,7 +285,8 @@ def page(page):
         "communications",
         "records",
         "analytics",
-        "reports"
+        "reports",
+        "care"
     ]
 
     if page not in allowed_pages:
